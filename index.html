@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>World Power Online</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#101827;color:#f4f7fb;padding:18px}.top{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}.tag{color:#9ce9c1}button{padding:10px 13px;border:1px solid #64748b;border-radius:10px;background:#243247;color:white;font-size:15px}h1{font-size:29px;margin:26px 0 8px}p{color:#c5d0df;line-height:1.5}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px}.card{background:#1d2a3e;border:1px solid #34445d;border-radius:14px;padding:16px;min-height:105px}.card b{display:block;margin:7px 0}.small{font-size:13px;color:#aebed1}.section{margin-top:28px}.primary{background:#176b50;border:0}.notice{border-left:3px solid #7dd3a9;padding:10px;background:#1a2b34;border-radius:6px}
+</style>
+</head>
+<body>
+<header class="top"><strong>🌐 WORLD POWER ONLINE</strong><button id="lang" onclick="toggleLang()">🌐 हिन्दी</button></header>
+<h1 id="title">Build your nation. Shape the world.</h1><p id="intro">A multiplayer government and world strategy game. Choose a country and apply for a role.</p>
+<div class="notice" id="notice">Preview version — online accounts and real multiplayer are not connected yet.</div>
+<section class="section"><h2 id="countriesTitle">Choose a country</h2><div class="grid" id="countries"></div></section>
+<section class="section"><h2 id="rolesTitle">Government & public service</h2><div class="grid" id="roles"></div></section>
+<section class="section"><h2 id="actionsTitle">Your next step</h2><div class="card"><b id="applyTitle">Apply for a position</b><p id="applyText">Choose a country first. Your application system will be added in the next version.</p><button class="primary" onclick="alert(lang==='en'?'Application system is coming in the next version.':'आवेदन प्रणाली अगले version में आएगी।')" id="applyBtn">Get started</button></div></section>
+<script>
+let lang="en",selected=-1;
+const countries=[["🇮🇳","India","भारत"],["🇺🇸","United States","अमेरिका"],["🇷🇺","Russia","रूस"],["🇨🇳","China","चीन"],["🇰🇵","North Korea","उत्तर कोरिया"],["🇮🇱","Israel","इज़राइल"],["🇮🇷","Iran","ईरान"],["🇯🇵","Japan","जापान"],["🇵🇰","Pakistan","पाकिस्तान"],["🇬🇧","United Kingdom","ब्रिटेन"]];
+const roles=[["🏛️","Government","सरकार"],["🗳️","Elections","चुनाव"],["🛡️","Police & Justice","पुलिस और न्याय"],["🪖","Defence","रक्षा"],["🕵️","Intelligence","खुफिया विभाग"],["💼","Business & Finance","व्यापार और वित्त"],["🌍","Diplomacy","कूटनीति"],["📰","Public Affairs","जनसंपर्क"]];
+const words={en:{title:"Build your nation. Shape the world.",intro:"A multiplayer government and world strategy game. Choose a country and apply for a role.",notice:"Preview version — online accounts and real multiplayer are not connected yet.",countries:"Choose a country",roles:"Government & public service",next:"Your next step",apply:"Apply for a position",applyText:"Choose a country first. Your application system will be added in the next version.",btn:"Get started",chosen:"Selected country: "},hi:{title:"अपना देश चलाओ। दुनिया बदलो।",intro:"सरकार और विश्व रणनीति पर आधारित multiplayer गेम। देश चुनें और पद के लिए आवेदन करें।",notice:"यह शुरुआती preview है — online accounts और multiplayer अभी जुड़े नहीं हैं।",countries:"अपना देश चुनें",roles:"सरकार और सार्वजनिक सेवाएँ",next:"आपका अगला कदम",apply:"पद के लिए आवेदन करें",applyText:"पहले देश चुनें। आवेदन प्रणाली अगले version में जोड़ी जाएगी।",btn:"शुरू करें",chosen:"चुना गया देश: "}};
+function render(){let w=words[lang];document.documentElement.lang=lang==="hi"?"hi":"en";document.getElementById("title").textContent=w.title;document.getElementById("intro").textContent=w.intro;document.getElementById("notice").textContent=w.notice;document.getElementById("countriesTitle").textContent=w.countries;document.getElementById("rolesTitle").textContent=w.roles;document.getElementById("actionsTitle").textContent=w.next;document.getElementById("applyTitle").textContent=w.apply;document.getElementById("applyText").textContent=(selected<0?"":w.chosen+countries[selected][lang==="hi"?2:1]+". ")+w.applyText;document.getElementById("applyBtn").textContent=w.btn;document.getElementById("lang").textContent=lang==="en"?"🌐 हिन्दी":"🌐 English";document.getElementById("countries").innerHTML=countries.map((c,i)=>`<button class="card" style="text-align:left;${selected===i?"border:2px solid #7dd3a9":""}" onclick="selectCountry(${i})"><span>${c[0]}</span><b>${c[lang==="hi"?2:1]}</b><span class="small">${selected===i?(lang==="en"?"Selected":"चुना गया"):(lang==="en"?"Select country":"देश चुनें")}</span></button>`).join("");document.getElementById("roles").innerHTML=roles.map(r=>`<div class="card"><span>${r[0]}</span><b>${r[lang==="hi"?2:1]}</b></div>`).join("")}
+function toggleLang(){lang=lang==="en"?"hi":"en";render()}function selectCountry(i){selected=i;render()}render();
+</script>
+</body>
+</html>
