@@ -375,7 +375,12 @@ $("saveBtn").addEventListener("click",async()=>{
 });
   message("profileMessage",t("saved"));
  }catch(e){
-  message("profileMessage","Could not save profile on this device.",true);
+  console.error("Profile save error:", e);
+  message(
+    "profileMessage",
+    "Online save failed: " + (e.code || e.message || "Unknown error"),
+    true
+  );
  }
 });
 
