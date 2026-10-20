@@ -26,6 +26,15 @@ button{padding:11px 14px;background:#60a5fa;color:#071426;border:0;border-radius
 .error{color:#ffb8c3}
 .hidden{display:none!important}
 @media(min-width:600px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+
+.dashboard-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:14px 0}
+.dash-card{background:#101a2b;color:#edf3ff;border:1px solid #40516b;border-radius:12px;padding:16px 10px;min-height:100px;text-align:left}
+.dash-card strong{display:block;font-size:16px;margin-bottom:7px}
+.dash-card span{font-size:12px;color:#b6c4d8;line-height:1.5}
+.dash-card:active{background:#1c3454}
+#dashboardContent{white-space:normal;line-height:1.7}
+@media(min-width:600px){.dashboard-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+
 </style>
 </head>
 <body>
@@ -51,6 +60,27 @@ button{padding:11px 14px;background:#60a5fa;color:#071426;border:0;border-radius
 <p id="authMessage" class="muted"></p>
 </section>
 
+<div class="panel" id="dashboardPanel">
+<h2>🌍 World Dashboard</h2>
+<p class="muted">Your nation. Your decisions. Your world.</p>
+<div class="dashboard-grid">
+<button class="dash-card" data-page="world"><strong>🌍 World</strong><span>World status and overview</span></button>
+<button class="dash-card" data-page="government"><strong>🏛️ Government</strong><span>Cabinet and public policy</span></button>
+<button class="dash-card" data-page="military"><strong>🪖 Military</strong><span>Defence and military posts</span></button>
+<button class="dash-card" data-page="airforce"><strong>✈️ Air Force</strong><span>Air defence management</span></button>
+<button class="dash-card" data-page="navy"><strong>⚓ Navy</strong><span>Naval administration</span></button>
+<button class="dash-card" data-page="business"><strong>💼 Business</strong><span>Economy and enterprises</span></button>
+<button class="dash-card" data-page="servers"><strong>🌐 Servers</strong><span>Prepare for multiplayer</span></button>
+<button class="dash-card" data-page="profile"><strong>👤 My Profile</strong><span>Your player information</span></button>
+</div>
+<div class="panel" id="dashboardContent">
+<h2>Welcome to World Power Online</h2>
+<p>Select a section above to explore the game.</p>
+</div>
+</div>
+</section>
+<p class="muted">World Power Online — early prototype. More game systems will be added later.</p>
+ 
 <section class="panel hidden" id="gamePanel">
 <p id="userEmail" class="muted"></p>
 <button class="danger" id="logoutBtn">Log Out</button>
@@ -433,6 +463,79 @@ $("saveBtn").addEventListener("click",async()=>{
    true
   );
  }
+});
+
+const dashboardPages = {
+ world: {
+  title: "🌍 World Overview",
+  text: "Your selected country is the starting point of your world. Future updates will add country statistics, reputation, public support and world events."
+ },
+ government: {
+  title: "🏛️ Government & Cabinet",
+  text: "Government management will include the Prime Minister, President, ministers, departments, public policies and elections."
+ },
+ military: {
+  title: "🪖 Military Command",
+  text: "The future military system will include defence administration, military posts, readiness and resource management."
+ },
+ airforce: {
+  title: "✈️ Air Force",
+  text: "Air force management will include aircraft resources, airbases and readiness in future updates."
+ },
+ navy: {
+  title: "⚓ Navy",
+  text: "Naval management will include fleets, ports, ships and maritime administration in future updates."
+ },
+ business: {
+  title: "💼 Business & Economy",
+  text: "The economy system will include businesses, income, employment, investments and the national budget."
+ },
+ servers: {
+  title: "🌐 Multiplayer Servers",
+  text: "This is a preview only. Live multiplayer servers, player matching and real-time shared game state have not been connected yet."
+ },
+ profile: {
+  title: "👤 My Profile",
+  text: "Your saved player profile is shown below."
+ }
+};
+
+document.querySelectorAll(".dash-card").forEach(button => {
+ button.addEventListener("click", () => {
+  const page = dashboardPages[button.dataset.page];
+  if (!page) return;
+
+  const content = $("dashboardContent");
+  content.replaceChildren();
+
+  const heading = document.createElement("h2");
+  heading.textContent = page.title;
+
+  const description = document.createElement("p");
+  description.textContent = page.text;
+
+  content.append(heading, description);
+
+  if (button.dataset.page === "profile") {
+   const profile = $("profileSummary").textContent;
+   const details = document.createElement("p");
+   details.textContent = profile;
+   content.appendChild(details);
+  }
+
+  const back = document.createElement("button");
+  back.className = "secondary";
+  back.textContent = "Back to Dashboard";
+  back.addEventListener("click", () => {
+   content.replaceChildren();
+   const h = document.createElement("h2");
+   h.textContent = "Welcome to World Power Online";
+   const p = document.createElement("p");
+   p.textContent = "Select a section above to explore the game.";
+   content.append(h, p);
+  });
+  content.appendChild(back);
+ });
 });
 
 applyLanguage();
