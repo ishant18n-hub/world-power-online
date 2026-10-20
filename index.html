@@ -3,38 +3,39 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>World Power Online</title>
 <style>
 *{box-sizing:border-box}
 body{margin:0;background:#0b1220;color:#edf3ff;font-family:Arial,sans-serif}
-header{padding:18px;background:#151f31;display:flex;justify-content:space-between;align-items:center;gap:10px}
-h1{font-size:22px;margin:0}
-main{max-width:850px;margin:auto;padding:16px}
-.panel{background:#151f31;border:1px solid #2a3951;border-radius:14px;padding:16px;margin:15px 0}
+header{padding:16px;background:#151f31;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+h1{font-size:21px;margin:0}
+main{max-width:900px;margin:auto;padding:14px}
+.panel{background:#151f31;border:1px solid #2a3951;border-radius:14px;padding:15px;margin:14px 0}
 h2{font-size:20px}
 input,select{width:100%;padding:12px;margin:6px 0 12px;background:#0b1424;color:white;border:1px solid #40516b;border-radius:8px;font-size:16px}
-button{padding:11px 14px;background:#60a5fa;color:#071426;border:0;border-radius:8px;font-weight:bold;font-size:15px;margin:4px;cursor:pointer}
+button{padding:11px 13px;background:#60a5fa;color:#071426;border:0;border-radius:8px;font-weight:bold;font-size:14px;margin:4px;cursor:pointer}
+button:disabled{opacity:.5;cursor:not-allowed}
 .secondary{background:#304158;color:white}
 .danger{background:#a83249;color:white}
-.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
-.country{background:#101a2b;color:white;border:1px solid #40516b;text-align:left;min-height:75px}
-.country.active{border:2px solid #60a5fa;background:#1c3454}
-.flag{font-size:23px}
-.muted{color:#b6c4d8;font-size:14px;line-height:1.5}
+.muted{color:#b6c4d8;font-size:14px;line-height:1.6}
 .notice{padding:12px;background:#12332f;border-radius:8px;color:#b7f7dc}
 .error{color:#ffb8c3}
 .hidden{display:none!important}
-@media(min-width:600px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
-
-.dashboard-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:14px 0}
-.dash-card{background:#101a2b;color:#edf3ff;border:1px solid #40516b;border-radius:12px;padding:16px 10px;min-height:100px;text-align:left}
-.dash-card strong{display:block;font-size:16px;margin-bottom:7px}
-.dash-card span{font-size:12px;color:#b6c4d8;line-height:1.5}
-.dash-card:active{background:#1c3454}
-#dashboardContent{white-space:normal;line-height:1.7}
-@media(min-width:600px){.dashboard-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
-
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.country{background:#101a2b;color:white;border:1px solid #40516b;text-align:left;min-height:60px}
+.country.active{border:2px solid #60a5fa;background:#1c3454}
+.dashboard-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.dash-card{background:#101a2b;color:#edf3ff;border:1px solid #40516b;border-radius:12px;padding:15px 10px;min-height:95px;text-align:left}
+.dash-card strong,.dash-card span{display:block}
+.dash-card span{font-size:12px;color:#b6c4d8;margin-top:7px;line-height:1.5}
+.stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.stat{background:#0b1424;padding:13px;border-radius:10px;border:1px solid #304158}
+.stat small{display:block;color:#b6c4d8;margin-bottom:8px}
+.stat strong{font-size:22px}
+.action{display:block;width:100%;text-align:left;margin:8px 0;background:#22354c;color:white;border:1px solid #40516b}
+.action span{display:block;font-size:12px;font-weight:normal;color:#c4d1e3;margin-top:5px}
+@media(min-width:600px){.grid,.dashboard-grid,.stats{grid-template-columns:repeat(3,minmax(0,1fr))}}
 </style>
 </head>
 <body>
@@ -44,51 +45,26 @@ button{padding:11px 14px;background:#60a5fa;color:#071426;border:0;border-radius
 </header>
 <main>
 <p id="tagline">Build your nation. Shape the world.</p>
-<div class="notice" id="notice">Create an account to start your journey.</div>
+<div class="notice" id="globalMessage">Create an account or log in to play.</div>
 
 <section class="panel" id="authPanel">
 <h2 id="authTitle">Player Registration / Login</h2>
-<p class="muted" id="authIntro">Use your email. Password must contain at least 6 characters.</p>
-<label id="emailLabel" for="email">Email</label>
-<input id="email" type="email" autocomplete="email" placeholder="you@example.com">
-<label id="passwordLabel" for="password">Password</label>
-<input id="password" type="password" autocomplete="current-password" minlength="6" placeholder="At least 6 characters">
-<div>
+<label for="email">Email</label>
+<input id="email" type="email" autocomplete="email">
+<label for="password">Password</label>
+<input id="password" type="password" minlength="6" autocomplete="current-password">
 <button id="registerBtn">Create Account</button>
 <button class="secondary" id="loginBtn">Log In</button>
-</div>
 <p id="authMessage" class="muted"></p>
 </section>
 
-<div class="panel" id="dashboardPanel">
-<h2>🌍 World Dashboard</h2>
-<p class="muted">Your nation. Your decisions. Your world.</p>
-<div class="dashboard-grid">
-<button class="dash-card" data-page="world"><strong>🌍 World</strong><span>World status and overview</span></button>
-<button class="dash-card" data-page="government"><strong>🏛️ Government</strong><span>Cabinet and public policy</span></button>
-<button class="dash-card" data-page="military"><strong>🪖 Military</strong><span>Defence and military posts</span></button>
-<button class="dash-card" data-page="airforce"><strong>✈️ Air Force</strong><span>Air defence management</span></button>
-<button class="dash-card" data-page="navy"><strong>⚓ Navy</strong><span>Naval administration</span></button>
-<button class="dash-card" data-page="business"><strong>💼 Business</strong><span>Economy and enterprises</span></button>
-<button class="dash-card" data-page="servers"><strong>🌐 Servers</strong><span>Prepare for multiplayer</span></button>
-<button class="dash-card" data-page="profile"><strong>👤 My Profile</strong><span>Your player information</span></button>
-</div>
-<div class="panel" id="dashboardContent">
-<h2>Welcome to World Power Online</h2>
-<p>Select a section above to explore the game.</p>
-</div>
-</div>
-</section>
-<p class="muted">World Power Online — early prototype. More game systems will be added later.</p>
- 
-<section class="panel hidden" id="gamePanel">
-<p id="userEmail" class="muted"></p>
+<section class="hidden" id="gamePanel">
+<div class="panel">
+<p class="muted" id="userEmail"></p>
 <button class="danger" id="logoutBtn">Log Out</button>
-<h2 id="countryHeading">Choose your country</h2>
-<p id="countryIntro" class="muted">Select one country.</p>
+<h2 id="profileTitle">Your Player Profile</h2>
 <div class="grid" id="countries"></div>
-
-<label id="roleLabel" for="role">Preferred role</label>
+<label for="role" id="roleLabel">Preferred role</label>
 <select id="role">
 <option value="Citizen">Citizen</option>
 <option value="Applicant">Government applicant</option>
@@ -96,448 +72,323 @@ button{padding:11px 14px;background:#60a5fa;color:#071426;border:0;border-radius
 <option value="Police">Police department</option>
 <option value="PublicService">Public service</option>
 </select>
-
-<label id="nameLabel" for="displayName">Player name</label>
+<label for="displayName" id="nameLabel">Player name</label>
 <input id="displayName" maxlength="24" placeholder="Game display name">
 <button id="saveBtn">Save Profile</button>
 <p id="profileMessage" class="muted"></p>
+<p id="profileSummary" class="muted"></p>
+</div>
+
 <div class="panel">
-<h2 id="profileHeading">Your Profile</h2>
-<p id="profileSummary" class="muted">Choose a country and save your profile.</p>
+<h2>🌍 World Dashboard</h2>
+<p class="muted" id="countryWelcome">Manage your simulated nation.</p>
+<div class="dashboard-grid">
+<button class="dash-card" data-page="world"><strong>🌍 World</strong><span>National statistics</span></button>
+<button class="dash-card" data-page="government"><strong>🏛️ Government</strong><span>Policies and public trust</span></button>
+<button class="dash-card" data-page="military"><strong>🪖 Military</strong><span>Defence budget</span></button>
+<button class="dash-card" data-page="airforce"><strong>✈️ Air Force</strong><span>Air administration</span></button>
+<button class="dash-card" data-page="navy"><strong>⚓ Navy</strong><span>Naval administration</span></button>
+<button class="dash-card" data-page="business"><strong>💼 Business</strong><span>Economy overview</span></button>
+<button class="dash-card" data-page="servers"><strong>🌐 Servers</strong><span>Multiplayer status</span></button>
+<button class="dash-card" data-page="profile"><strong>👤 My Profile</strong><span>Player information</span></button>
+</div>
+</div>
+
+<div class="panel" id="gameArea">
+<h2 id="pageTitle">📊 National Statistics</h2>
+<p class="muted" id="pageDescription">Your nation's current simulated status.</p>
+<div class="stats">
+<div class="stat"><small>National budget</small><strong id="budgetStat">1000</strong></div>
+<div class="stat"><small>Public trust</small><strong id="trustStat">60/100</strong></div>
+<div class="stat"><small>Reputation</small><strong id="reputationStat">50/100</strong></div>
+<div class="stat"><small>Hospital capacity</small><strong id="hospitalStat">60/100</strong></div>
+<div class="stat"><small>Education</small><strong id="educationStat">60/100</strong></div>
+<div class="stat"><small>Defence readiness</small><strong id="defenceStat">50/100</strong></div>
+</div>
+<div id="actionsArea"></div>
+<p id="gameMessage" class="muted"></p>
 </div>
 </section>
-<p class="muted">World Power Online — early prototype. More game systems will be added later.</p>
+
+<p class="muted">World Power Online — free-tier prototype. Multiplayer is not yet connected.</p>
 </main>
 
 <script type="module">
 import {initializeApp}
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-
 import {
  getAuth,createUserWithEmailAndPassword,
  signInWithEmailAndPassword,onAuthStateChanged,signOut
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
 import {
  getFirestore,doc,getDoc,setDoc,serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-/* Keep your actual Firebase web config here. */
-const firebaseConfig = {
- apiKey: "AIzaSyBGJYjRaaKRKiywUW6c38zo_yBEQKQy09s",
- authDomain: "world-power-online.firebaseapp.com",
- projectId: "world-power-online",
- storageBucket: "world-power-online.firebasestorage.app",
- messagingSenderId: "345036554675",
- appId: "1:345036554675:web:f85399cfc5bd69cbab4bc6"
+/* Keep the Firebase values from your existing project. */
+const firebaseConfig={
+ apiKey:"AIzaSyBGJYjRaaKRKiywUW6c38zo_yBEQKQy09s",
+ authDomain:"world-power-online.firebaseapp.com",
+ projectId:"world-power-online",
+ storageBucket:"world-power-online.firebasestorage.app",
+ messagingSenderId:"345036554675",
+ appId:"1:345036554675:web:f85399cfc5bd69cbab4bc6"
 };
 
-const $ = id => document.getElementById(id);
-
-const countries = [
- {flag:"🇮🇳",en:"India",hi:"भारत"},
- {flag:"🇺🇸",en:"America",hi:"अमेरिका"},
- {flag:"🇷🇺",en:"Russia",hi:"रूस"},
- {flag:"🇨🇳",en:"China",hi:"चीन"},
- {flag:"🇰🇵",en:"North Korea",hi:"उत्तर कोरिया"},
- {flag:"🇮🇱",en:"Israel",hi:"इज़राइल"},
- {flag:"🇮🇷",en:"Iran",hi:"ईरान"},
- {flag:"🇯🇵",en:"Japan",hi:"जापान"},
- {flag:"🇵🇰",en:"Pakistan",hi:"पाकिस्तान"},
- {flag:"🇬🇧",en:"United Kingdom",hi:"ब्रिटेन"}
+const $=id=>document.getElementById(id);
+const countries=[
+ ["🇮🇳","India","भारत"],["🇺🇸","America","अमेरिका"],
+ ["🇷🇺","Russia","रूस"],["🇨🇳","China","चीन"],
+ ["🇰🇵","North Korea","उत्तर कोरिया"],["🇮🇱","Israel","इज़राइल"],
+ ["🇮🇷","Iran","ईरान"],["🇯🇵","Japan","जापान"],
+ ["🇵🇰","Pakistan","पाकिस्तान"],["🇬🇧","United Kingdom","ब्रिटेन"]
 ];
+const roles=["Citizen","Applicant","Business","Police","PublicService"];
+let lang="en",selectedCountry="",auth=null,db=null,userNow=null;
+let profile=null,game=null,currentPage="world",busy=false;
 
-const translations = {
- en:{
-  tagline:"Build your nation. Shape the world.",
-  notice:"Create an account to start your journey.",
-  authTitle:"Player Registration / Login",
-  authIntro:"Use your email. Password must contain at least 6 characters.",
-  email:"Email",password:"Password",register:"Create Account",login:"Log In",
-  logout:"Log Out",countryHeading:"Choose your country",
-  countryIntro:"Select one country for your profile.",
-  role:"Preferred role",name:"Player name",save:"Save Profile",
-  profile:"Your Profile",choose:"Choose a country and save your profile.",
-  roles:["Citizen","Government applicant","Business leader","Police department","Public service"],
-  saved:"Profile saved online successfully.",
-  noCountry:"Please choose a country first.",
-  noName:"Please enter a player name.",
-  ready:"You are logged in. Choose your country.",
-  created:"Account created successfully.",
-  loggedIn:"Login successful.",
-  loggedOut:"You have logged out.",
-  invalid:"Enter a valid email and a password of at least 6 characters.",
-  line:"Player: {name} | Country: {country} | Role: {role}",
-  failed:"Error: "
- },
- hi:{
-  tagline:"अपने देश का निर्माण करो। दुनिया को आकार दो।",
-  notice:"शुरू करने के लिए अपना account बनाओ।",
-  authTitle:"Player Registration / Login",
-  authIntro:"अपना email इस्तेमाल करो। Password कम से कम 6 अक्षरों का हो।",
-  email:"ईमेल",password:"पासवर्ड",register:"Account बनाओ",login:"Login करो",
-  logout:"Logout",countryHeading:"अपना देश चुनो",
-  countryIntro:"अपनी प्रोफाइल के लिए एक देश चुनो।",
-  role:"अपनी भूमिका चुनो",name:"गेम में दिखने वाला नाम",
-  save:"प्रोफाइल सेव करो",profile:"तुम्हारी प्रोफाइल",
-  choose:"देश चुनो और अपनी प्रोफाइल सेव करो।",
-  roles:["नागरिक","सरकारी पद का आवेदनकर्ता","व्यवसायी","पुलिस विभाग","जनसेवा"],
-  saved:"प्रोफाइल ऑनलाइन सेव हो गई।",
-  noCountry:"पहले अपना देश चुनो।",
-  noName:"गेम में दिखने वाला नाम लिखो।",
-  ready:"Login हो गया। अब अपना देश चुनो।",
-  created:"Account सफलतापूर्वक बन गया।",
-  loggedIn:"Login सफल रहा.",
-  loggedOut:"Logout हो गया।",
-  invalid:"सही email और कम से कम 6 अक्षरों का password डालो।",
-  line:"खिलाड़ी: {name} | देश: {country} | भूमिका: {role}",
-  failed:"त्रुटि: "
- }
-};
-
-let lang = "en";
-let selectedCountry = "";
-let auth = null;
-let db = null;
-let firebaseReady = false;
-
-function t(key){
- return translations[lang][key] || key;
-}
-
-function message(id,text,error=false){
+const initialGame=()=>({
+ budget:1000,trust:60,reputation:50,hospital:60,
+ education:60,defence:50,turn:1,lastAction:"Game started"
+});
+const clamp=n=>Math.max(0,Math.min(100,n));
+const fmt=n=>Math.round(n).toLocaleString("en-IN");
+function msg(id,text,error=false){
  $(id).textContent=text;
  $(id).className=error?"muted error":"muted";
 }
+function say(text,error=false){msg("gameMessage",text,error)}
+function tr(en,hi){return lang==="en"?en:hi}
 
 function renderCountries(){
- const container=$("countries");
- container.innerHTML="";
- countries.forEach(c=>{
+ const root=$("countries");root.replaceChildren();
+ countries.forEach(([flag,en,hi])=>{
   const b=document.createElement("button");
-  b.type="button";
-  b.className="country"+(selectedCountry===c.en?" active":"");
-  const flag=document.createElement("span");
-  flag.className="flag";
-  flag.textContent=c.flag+" ";
-  const name=document.createElement("strong");
-  name.textContent=lang==="en"?c.en:c.hi;
-  b.append(flag,name);
-  b.addEventListener("click",()=>{
-   selectedCountry=c.en;
-   renderCountries();
-  });
-  container.appendChild(b);
+  b.className="country"+(selectedCountry===en?" active":"");
+  b.textContent=flag+" "+(lang==="en"?en:hi);
+  b.onclick=()=>{selectedCountry=en;renderCountries()};
+  root.appendChild(b);
  });
 }
-
+function renderRoles(){
+ const select=$("role"),old=select.value;
+ select.replaceChildren();
+ const names=lang==="en"
+  ?["Citizen","Government applicant","Business leader","Police department","Public service"]
+  :["नागरिक","सरकारी पद का आवेदनकर्ता","व्यवसायी","पुलिस विभाग","जनसेवा"];
+ roles.forEach((r,i)=>{
+  const o=document.createElement("option");
+  o.value=r;o.textContent=names[i];select.appendChild(o);
+ });
+ select.value=roles.includes(old)?old:"Citizen";
+}
 function applyLanguage(){
- const map={
-  tagline:"tagline",notice:"notice",authTitle:"authTitle",
-  authIntro:"authIntro",emailLabel:"email",passwordLabel:"password",
-  registerBtn:"register",loginBtn:"login",logoutBtn:"logout",
-  countryHeading:"countryHeading",countryIntro:"countryIntro",
-  roleLabel:"role",nameLabel:"name",saveBtn:"save",
-  profileHeading:"profile"
- };
- Object.keys(map).forEach(id=>{
-  $(id).textContent=t(map[id]);
- });
  $("languageBtn").textContent=lang==="en"?"हिन्दी":"English";
+ $("tagline").textContent=tr("Build your nation. Shape the world.","अपने देश का निर्माण करो। दुनिया को आकार दो।");
+ $("authTitle").textContent=tr("Player Registration / Login","खिलाड़ी रजिस्ट्रेशन / लॉगिन");
+ $("profileTitle").textContent=tr("Your Player Profile","तुम्हारी खिलाड़ी प्रोफाइल");
+ $("roleLabel").textContent=tr("Preferred role","अपनी भूमिका");
+ $("nameLabel").textContent=tr("Player name","खिलाड़ी का नाम");
+ $("saveBtn").textContent=tr("Save Profile","प्रोफाइल सेव करो");
+ renderCountries();renderRoles();
+ if(game)renderGame();
+ if(profile)showProfile();
+}
+$("languageBtn").onclick=()=>{lang=lang==="en"?"hi":"en";applyLanguage()};
 
- const vals=["Citizen","Applicant","Business","Police","PublicService"];
- const oldRole=$("role").value;
- $("role").innerHTML="";
- vals.forEach((v,i)=>{
-  const opt=document.createElement("option");
-  opt.value=v;
-  opt.textContent=t("roles")[i];
-  $("role").appendChild(opt);
- });
- $("role").value=vals.includes(oldRole)?oldRole:"Citizen";
- renderCountries();
+function showProfile(){
+ if(!profile)return;
+ const country=countries.find(c=>c[1]===profile.country);
+ const countryName=country?(lang==="en"?country[1]:country[2]):profile.country;
+ const roleIndex=roles.indexOf(profile.role);
+ const roleNames=lang==="en"
+  ?["Citizen","Government applicant","Business leader","Police department","Public service"]
+  :["नागरिक","सरकारी पद का आवेदनकर्ता","व्यवसायी","पुलिस विभाग","जनसेवा"];
+ $("profileSummary").textContent=
+  tr("Player: ","खिलाड़ी: ")+(profile.name||"")+" | "+
+  tr("Country: ","देश: ")+(countryName||"")+" | "+
+  tr("Role: ","भूमिका: ")+(roleNames[Math.max(0,roleIndex)]||"Citizen");
+ $("countryWelcome").textContent=
+  tr("You manage: ","तुम्हारा देश: ")+(countryName||"");
 }
 
-$("languageBtn").addEventListener("click",()=>{
- lang=lang==="en"?"hi":"en";
- applyLanguage();
+function renderGame(){
+ if(!game)return;
+ ["budget","trust","reputation","hospital","education","defence"].forEach(k=>{
+  const el=$(k+"Stat");if(el)el.textContent=fmt(game[k])+(["trust","reputation","hospital","education","defence"].includes(k)?"/100":"");
+ });
+ const pages={
+  world:[tr("🌍 National Statistics","🌍 राष्ट्रीय आँकड़े"),tr("Review the current state of your simulated nation.","अपने देश की मौजूदा स्थिति देखो।")],
+  government:[tr("🏛️ Government & Policies","🏛️ सरकार और नीतियाँ"),tr("Choose a policy. Each choice costs budget and changes national statistics.","नीति चुनो। हर फैसले से बजट और देश के आँकड़े बदलेंगे।")],
+  military:[tr("🪖 Defence Administration","🪖 रक्षा प्रशासन"),tr("Manage simulated defence readiness and spending.","गेम में रक्षा बजट और तैयारी संभालो।")],
+  airforce:[tr("✈️ Air Force","✈️ वायुसेना"),tr("Air administration preview. Detailed units will be added later.","वायुसेना का शुरुआती पेज। विस्तृत सिस्टम बाद में जुड़ेगा।")],
+  navy:[tr("⚓ Navy","⚓ नौसेना"),tr("Naval administration preview. Detailed units will be added later.","नौसेना का शुरुआती पेज। विस्तृत सिस्टम बाद में जुड़ेगा।")],
+  business:[tr("💼 Business & Economy","💼 व्यापार और अर्थव्यवस्था"),tr("Manage your simulated economy through policies.","नीतियों से गेम की अर्थव्यवस्था संभालो।")],
+  servers:[tr("🌐 Multiplayer Servers","🌐 मल्टीप्लेयर सर्वर"),tr("This prototype saves your own state. Shared live multiplayer is not connected yet.","यह prototype तुम्हारा डेटा सेव करता है। असली live multiplayer अभी जुड़ा नहीं है।")],
+  profile:[tr("👤 My Profile","👤 मेरी प्रोफाइल"),tr("Your account and saved player profile.","तुम्हारा account और सेव की गई प्रोफाइल।")]
+ };
+ $("pageTitle").textContent=pages[currentPage][0];
+ $("pageDescription").textContent=pages[currentPage][1];
+ const area=$("actionsArea");area.replaceChildren();
+ const stat=$("gameArea").querySelector(".stats");
+ stat.classList.toggle("hidden",currentPage==="servers"||currentPage==="profile");
+ const addAction=(title,description,cost,changes)=>{
+  const b=document.createElement("button");b.className="action";
+  const strong=document.createElement("strong");strong.textContent=title;
+  const span=document.createElement("span");
+  span.textContent=description+" | "+tr("Cost: ","खर्च: ")+cost;
+  b.append(strong,span);
+  b.disabled=busy||game.budget<cost;
+  b.onclick=()=>takeAction(title,cost,changes);
+  area.appendChild(b);
+ };
+ if(currentPage==="government"){
+  addAction(tr("Balanced healthcare programme","संतुलित स्वास्थ्य योजना"),tr("Improves hospital capacity and trust","अस्पताल क्षमता और भरोसा बढ़ाता है"),120,{hospital:8,trust:5,reputation:3});
+  addAction(tr("Education investment","शिक्षा में निवेश"),tr("Improves education and public trust","शिक्षा और जनविश्वास बढ़ाता है"),100,{education:8,trust:3,reputation:2});
+  addAction(tr("Public communication campaign","जनसंचार अभियान"),tr("Improves trust and reputation","भरोसा और प्रतिष्ठा बढ़ाता है"),60,{trust:5,reputation:4});
+ }else if(currentPage==="military"){
+  addAction(tr("Defence training programme","रक्षा प्रशिक्षण कार्यक्रम"),tr("Improves simulated readiness","गेम में तैयारी बढ़ाता है"),100,{defence:8,reputation:1});
+  addAction(tr("Defence maintenance","रक्षा रखरखाव"),tr("Maintains defence readiness","रक्षा तैयारी बनाए रखता है"),70,{defence:4,trust:-1});
+ }else if(currentPage==="business"){
+  addAction(tr("Small business support","छोटे व्यवसायों को सहायता"),tr("Costs money now; improves trust and reputation","अभी खर्च, भरोसा और प्रतिष्ठा बढ़ती है"),80,{trust:3,reputation:3});
+  addAction(tr("Economic development plan","आर्थिक विकास योजना"),tr("Costs money now; brings simulated future income","अभी खर्च, अगले turn में गेम की आय बढ़ेगी"),150,{trust:2,reputation:2,futureIncome:100});
+ }else if(currentPage==="airforce"||currentPage==="navy"){
+  const label=currentPage==="airforce"?tr("Air force maintenance","वायुसेना रखरखाव"):tr("Naval maintenance","नौसेना रखरखाव");
+  addAction(label,tr("A basic simulated administration action","शुरुआती गेम कार्रवाई"),50,{defence:2,reputation:1});
+ }else if(currentPage==="world"){
+  addAction(tr("Collect simulated tax revenue","गेम का कर राजस्व जमा करो"),0,{},{});
+ }
+ if(currentPage==="world"){
+  const b=document.createElement("button");b.className="action";
+  b.innerHTML="<strong>"+tr("Advance to next turn","अगले टर्न पर जाओ")+"</strong><span>"+tr("Collect 100 budget; progress one turn","100 बजट जोड़ो; एक टर्न आगे बढ़ो")+"</span>";
+  b.disabled=busy;b.onclick=nextTurn;area.appendChild(b);
+ }
+ if(currentPage==="profile"){
+  const p=document.createElement("p");p.className="muted";
+  p.textContent=$("profileSummary").textContent;area.appendChild(p);
+ }
+ if(currentPage==="servers"){
+  const p=document.createElement("p");p.className="muted";
+  p.textContent=tr("Live server matching, chat and shared country state still need a secure multiplayer backend.","लाइव सर्वर मैचिंग, चैट और साझा देश के लिए आगे सुरक्षित multiplayer backend जोड़ना होगा।");
+  area.appendChild(p);
+ }
+}
+async function saveGame(){
+ if(!userNow)throw new Error("auth-required");
+ await setDoc(doc(db,"players",userNow.uid),{
+  name:profile.name,country:profile.country,role:profile.role,
+  gameState:game,updatedAt:serverTimestamp()
+ },{merge:true});
+}
+async function takeAction(title,cost,changes){
+ if(busy||!userNow)return;
+ if(game.budget<cost){say(tr("Not enough budget.","बजट पर्याप्त नहीं है।"),true);return}
+ busy=true;renderGame();say(tr("Saving decision...","फैसला सेव हो रहा है..."));
+ const previous={...game};
+ try{
+  game.budget-=cost;
+  for(const [k,v] of Object.entries(changes)){
+   if(k==="futureIncome")continue;
+   if(typeof game[k]==="number")game[k]=k==="budget"?game[k]+v:clamp(game[k]+v);
+  }
+  game.lastAction=title;
+  await saveGame();
+  say(tr("Decision saved online: ","फैसला ऑनलाइन सेव हुआ: ")+title);
+ }catch(e){
+  game=previous;
+  say(tr("Could not save. Check Firestore Rules and connection. ","सेव नहीं हुआ। Firestore Rules और इंटरनेट जाँचो। ")+(e.code||e.message),true);
+ }finally{busy=false;renderGame()}
+}
+async function nextTurn(){
+ if(busy)return;
+ busy=true;renderGame();const previous={...game};
+ try{
+  game.turn=(game.turn||1)+1;
+  game.budget+=100;
+  game.lastAction="Turn "+game.turn;
+  await saveGame();
+  say(tr("Turn advanced and saved online.","अगला टर्न ऑनलाइन सेव हो गया।"));
+ }catch(e){
+  game=previous;say(tr("Save failed: ","सेव नहीं हुआ: ")+(e.code||e.message),true);
+ }finally{busy=false;renderGame()}
+}
+
+document.querySelectorAll(".dash-card").forEach(b=>{
+ b.onclick=()=>{
+  currentPage=b.dataset.page;
+  renderGame();
+  $("gameArea").scrollIntoView({behavior:"smooth",block:"start"});
+ };
 });
 
-function friendlyError(code){
- const errors={
-  "auth/email-already-in-use":"This email already has an account.",
-  "auth/invalid-email":"Invalid email address.",
-  "auth/weak-password":"Choose a stronger password.",
-  "auth/invalid-credential":"Email or password is incorrect.",
-  "auth/network-request-failed":"Check your internet connection.",
-  "auth/too-many-requests":"Too many attempts. Try again later.",
-  "auth/operation-not-allowed":"Enable Email/Password in Firebase Authentication.",
-  "permission-denied":"Firestore permission denied. Check Firestore Rules."
- };
- return errors[code]||code||"Unknown error";
-}
-
-function showProfile(p){
- const c=countries.find(x=>x.en===p.country);
- const country=c?(lang==="en"?c.en:c.hi):p.country;
- const vals=["Citizen","Applicant","Business","Police","PublicService"];
- const i=vals.indexOf(p.role);
- $("profileSummary").textContent=t("line")
-  .replace("{name}",p.name||"")
-  .replace("{country}",country||"")
-  .replace("{role}",t("roles")[Math.max(0,i)]);
-}
-
-/* Initialise Firebase once. */
+let firebaseReady=false;
 try{
- const values=[
-  firebaseConfig.apiKey,
-  firebaseConfig.authDomain,
-  firebaseConfig.projectId,
-  firebaseConfig.appId
- ];
- const placeholders=["YOUR_API_KEY","YOUR_AUTH_DOMAIN","YOUR_PROJECT_ID","YOUR_APP_ID"];
-
- const valid=values.every((v,i)=>
-  typeof v==="string" &&
-  v.trim()!=="" &&
-  !v.includes("YOUR_") &&
-  !v.includes("PASTE_") &&
-  !v.includes("REPLACE_") &&
-  v!==placeholders[i]
- );
-
- if(!valid) throw new Error("CONFIG_MISSING");
-
- const app=initializeApp(firebaseConfig);
- auth=getAuth(app);
- db=getFirestore(app);
- firebaseReady=true;
-
+ const c=firebaseConfig;
+ if(!c.apiKey||!c.authDomain||!c.projectId||!c.appId||
+    c.apiKey.includes("YOUR_")||c.projectId.includes("YOUR_")){
+  throw new Error("Firebase configuration is incomplete.");
+ }
+ const app=initializeApp(c);
+ auth=getAuth(app);db=getFirestore(app);firebaseReady=true;
  onAuthStateChanged(auth,async user=>{
+  userNow=user;
   $("authPanel").classList.toggle("hidden",!!user);
   $("gamePanel").classList.toggle("hidden",!user);
-
-  if(user){
-   $("userEmail").textContent=user.email||"";
-   message("profileMessage",t("ready"));
-   await loadProfile(user.uid);
-  }else{
-   selectedCountry="";
-   $("displayName").value="";
-   $("profileSummary").textContent=t("choose");
+  if(!user)return;
+  $("userEmail").textContent=user.email||"";
+  msg("globalMessage",tr("Logged in successfully.","लॉगिन सफल रहा।"));
+  try{
+   const snap=await getDoc(doc(db,"players",user.uid));
+   if(snap.exists()){
+    const d=snap.data();
+    if(d.name&&d.country){
+     profile={name:d.name,country:d.country,role:d.role||"Citizen"};
+     selectedCountry=profile.country;
+     $("displayName").value=profile.name;
+     $("role").value=profile.role;
+    }
+    game=d.gameState?{...initialGame(),...d.gameState}:initialGame();
+   }else{game=initialGame()}
+   renderCountries();showProfile();renderGame();
+  }catch(e){
+   console.error(e);
+   msg("profileMessage",tr("Could not load saved data: ","डेटा लोड नहीं हुआ: ")+(e.code||e.message),true);
   }
  });
 }catch(e){
- console.error("Firebase initialisation error:",e);
- message(
-  "authMessage",
-  e.message==="CONFIG_MISSING"
-   ?"Firebase configuration is incomplete. Check firebaseConfig."
-   :"Firebase setup error: "+(e.message||"Unknown error"),
-  true
- );
+ console.error(e);msg("authMessage","Firebase setup error: "+e.message,true);
 }
-
-$("registerBtn").addEventListener("click",async()=>{
- const email=$("email").value.trim();
- const password=$("password").value;
-
- if(!firebaseReady){
-  message("authMessage","Check Firebase configuration first.",true);
-  return;
- }
- if(!email||password.length<6){
-  message("authMessage",t("invalid"),true);
-  return;
- }
+$("registerBtn").onclick=async()=>{
+ if(!firebaseReady){msg("authMessage","Firebase configuration is not ready.",true);return}
+ const email=$("email").value.trim(),password=$("password").value;
+ if(!email||password.length<6){msg("authMessage",tr("Enter a valid email and password of at least 6 characters.","सही ईमेल और कम से कम 6 अक्षरों का पासवर्ड डालो।"),true);return}
+ try{await createUserWithEmailAndPassword(auth,email,password);msg("authMessage","Account created.");}
+ catch(e){msg("authMessage","Registration error: "+e.code,true)}
+};
+$("loginBtn").onclick=async()=>{
+ if(!firebaseReady){msg("authMessage","Firebase configuration is not ready.",true);return}
+ const email=$("email").value.trim(),password=$("password").value;
+ if(!email||password.length<6){msg("authMessage",tr("Enter a valid email and password of at least 6 characters.","सही ईमेल और कम से कम 6 अक्षरों का पासवर्ड डालो।"),true);return}
+ try{await signInWithEmailAndPassword(auth,email,password);msg("authMessage","Login successful.");}
+ catch(e){msg("authMessage","Login error: "+e.code,true)}
+};
+$("logoutBtn").onclick=()=>signOut(auth);
+$("saveBtn").onclick=async()=>{
+ if(!userNow){msg("profileMessage","Please log in first.",true);return}
+ const name=$("displayName").value.trim(),role=$("role").value;
+ if(!selectedCountry){msg("profileMessage",tr("Choose a country first.","पहले देश चुनो।"),true);return}
+ if(!name){msg("profileMessage",tr("Enter a player name.","खिलाड़ी का नाम लिखो।"),true);return}
+ profile={name,country:selectedCountry,role};
  try{
-  await createUserWithEmailAndPassword(auth,email,password);
-  message("authMessage",t("created"));
+  await setDoc(doc(db,"players",userNow.uid),{
+   name,country:selectedCountry,role,updatedAt:serverTimestamp(),
+   gameState:game||initialGame()
+  },{merge:true});
+  game=game||initialGame();showProfile();renderGame();
+  msg("profileMessage",tr("Profile saved online successfully.","प्रोफाइल ऑनलाइन सेव हो गई।"));
  }catch(e){
-  console.error("Registration error:",e);
-  message("authMessage",t("failed")+friendlyError(e.code),true);
- }
-});
-
-$("loginBtn").addEventListener("click",async()=>{
- const email=$("email").value.trim();
- const password=$("password").value;
-
- if(!firebaseReady){
-  message("authMessage","Check Firebase configuration first.",true);
-  return;
- }
- if(!email||password.length<6){
-  message("authMessage",t("invalid"),true);
-  return;
- }
- try{
-  await signInWithEmailAndPassword(auth,email,password);
-  message("authMessage",t("loggedIn"));
- }catch(e){
-  console.error("Login error:",e);
-  message("authMessage",t("failed")+friendlyError(e.code),true);
- }
-});
-
-$("logoutBtn").addEventListener("click",async()=>{
- try{
-  await signOut(auth);
-  message("authMessage",t("loggedOut"));
- }catch(e){
-  console.error("Logout error:",e);
-  message("profileMessage",t("failed")+friendlyError(e.code),true);
- }
-});
-
-async function loadProfile(uid){
- try{
-  const snap=await getDoc(doc(db,"players",uid));
-  if(!snap.exists()) return;
-
-  const p=snap.data();
-  selectedCountry=p.country||"";
-  $("displayName").value=p.name||"";
-  $("role").value=p.role||"Citizen";
-
-  renderCountries();
-  showProfile(p);
- }catch(e){
-  console.error("Profile load error:",e);
-  message("profileMessage","Profile load error: "+(e.code||e.message),true);
- }
-}
-
-$("saveBtn").addEventListener("click",async()=>{
- const user=auth?auth.currentUser:null;
-
- if(!user){
-  message("profileMessage","Please log in first.",true);
-  return;
- }
-
- const name=$("displayName").value.trim();
- const allowedRoles=["Citizen","Applicant","Business","Police","PublicService"];
-
- if(!selectedCountry){
-  message("profileMessage",t("noCountry"),true);
-  return;
- }
- if(!name){
-  message("profileMessage",t("noName"),true);
-  return;
- }
- if(name.length>24){
-  message("profileMessage","Player name must be 24 characters or less.",true);
-  return;
- }
- if(!countries.some(c=>c.en===selectedCountry)){
-  message("profileMessage","Invalid country selection.",true);
-  return;
- }
-
- const role=$("role").value;
- if(!allowedRoles.includes(role)){
-  message("profileMessage","Invalid role selection.",true);
-  return;
- }
-
- const p={country:selectedCountry,name,role};
-
- try{
-  await setDoc(doc(db,"players",user.uid),{
-   name:p.name,
-   country:p.country,
-   role:p.role,
-   updatedAt:serverTimestamp()
-  });
-
-  showProfile(p);
-  message("profileMessage",t("saved"));
- }catch(e){
-  console.error("Profile save error:",e);
-  message(
-   "profileMessage",
-   "Save error: "+(e.code||e.message||"Unknown error"),
-   true
-  );
- }
-});
-
-const dashboardPages = {
- world: {
-  title: "🌍 World Overview",
-  text: "Your selected country is the starting point of your world. Future updates will add country statistics, reputation, public support and world events."
- },
- government: {
-  title: "🏛️ Government & Cabinet",
-  text: "Government management will include the Prime Minister, President, ministers, departments, public policies and elections."
- },
- military: {
-  title: "🪖 Military Command",
-  text: "The future military system will include defence administration, military posts, readiness and resource management."
- },
- airforce: {
-  title: "✈️ Air Force",
-  text: "Air force management will include aircraft resources, airbases and readiness in future updates."
- },
- navy: {
-  title: "⚓ Navy",
-  text: "Naval management will include fleets, ports, ships and maritime administration in future updates."
- },
- business: {
-  title: "💼 Business & Economy",
-  text: "The economy system will include businesses, income, employment, investments and the national budget."
- },
- servers: {
-  title: "🌐 Multiplayer Servers",
-  text: "This is a preview only. Live multiplayer servers, player matching and real-time shared game state have not been connected yet."
- },
- profile: {
-  title: "👤 My Profile",
-  text: "Your saved player profile is shown below."
+  console.error(e);msg("profileMessage","Save error: "+(e.code||e.message),true);
  }
 };
-
-document.querySelectorAll(".dash-card").forEach(button => {
- button.addEventListener("click", () => {
-  const page = dashboardPages[button.dataset.page];
-  if (!page) return;
-
-  const content = $("dashboardContent");
-  content.replaceChildren();
-
-  const heading = document.createElement("h2");
-  heading.textContent = page.title;
-
-  const description = document.createElement("p");
-  description.textContent = page.text;
-
-  content.append(heading, description);
-
-  if (button.dataset.page === "profile") {
-   const profile = $("profileSummary").textContent;
-   const details = document.createElement("p");
-   details.textContent = profile;
-   content.appendChild(details);
-  }
-
-  const back = document.createElement("button");
-  back.className = "secondary";
-  back.textContent = "Back to Dashboard";
-  back.addEventListener("click", () => {
-   content.replaceChildren();
-   const h = document.createElement("h2");
-   h.textContent = "Welcome to World Power Online";
-   const p = document.createElement("p");
-   p.textContent = "Select a section above to explore the game.";
-   content.append(h, p);
-  });
-  content.appendChild(back);
- });
-});
-
 applyLanguage();
 </script>
 </body>
