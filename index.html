@@ -2,26 +2,366 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>World Power Online</title>
 <style>
-*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#101827;color:#f4f7fb;padding:18px}.top{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}.tag{color:#9ce9c1}button{padding:10px 13px;border:1px solid #64748b;border-radius:10px;background:#243247;color:white;font-size:15px}h1{font-size:29px;margin:26px 0 8px}p{color:#c5d0df;line-height:1.5}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px}.card{background:#1d2a3e;border:1px solid #34445d;border-radius:14px;padding:16px;min-height:105px}.card b{display:block;margin:7px 0}.small{font-size:13px;color:#aebed1}.section{margin-top:28px}.primary{background:#176b50;border:0}.notice{border-left:3px solid #7dd3a9;padding:10px;background:#1a2b34;border-radius:6px}
+*{box-sizing:border-box}
+body{margin:0;background:#0b1220;color:#edf3ff;font-family:Arial,sans-serif}
+header{padding:18px;background:#151f31;display:flex;justify-content:space-between;align-items:center;gap:10px}
+h1{font-size:22px;margin:0}
+main{max-width:850px;margin:auto;padding:16px}
+.panel{background:#151f31;border:1px solid #2a3951;border-radius:14px;padding:16px;margin:15px 0}
+h2{font-size:20px}
+input,select{width:100%;padding:12px;margin:6px 0 12px;background:#0b1424;color:white;border:1px solid #40516b;border-radius:8px;font-size:16px}
+button{padding:11px 14px;background:#60a5fa;color:#071426;border:0;border-radius:8px;font-weight:bold;font-size:15px;margin:4px;cursor:pointer}
+.secondary{background:#304158;color:white}
+.danger{background:#a83249;color:white}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.country{background:#101a2b;color:white;border:1px solid #40516b;text-align:left;min-height:75px}
+.country.active{border:2px solid #60a5fa;background:#1c3454}
+.flag{font-size:23px}
+.muted{color:#b6c4d8;font-size:14px;line-height:1.5}
+.notice{padding:12px;background:#12332f;border-radius:8px;color:#b7f7dc}
+.error{color:#ffb8c3}
+.hidden{display:none!important}
+@media(min-width:600px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
 </style>
 </head>
 <body>
-<header class="top"><strong>🌐 WORLD POWER ONLINE</strong><button id="lang" onclick="toggleLang()">🌐 हिन्दी</button></header>
-<h1 id="title">Build your nation. Shape the world.</h1><p id="intro">A multiplayer government and world strategy game. Choose a country and apply for a role.</p>
-<div class="notice" id="notice">Preview version — online accounts and real multiplayer are not connected yet.</div>
-<section class="section"><h2 id="countriesTitle">Choose a country</h2><div class="grid" id="countries"></div></section>
-<section class="section"><h2 id="rolesTitle">Government & public service</h2><div class="grid" id="roles"></div></section>
-<section class="section"><h2 id="actionsTitle">Your next step</h2><div class="card"><b id="applyTitle">Apply for a position</b><p id="applyText">Choose a country first. Your application system will be added in the next version.</p><button class="primary" onclick="alert(lang==='en'?'Application system is coming in the next version.':'आवेदन प्रणाली अगले version में आएगी।')" id="applyBtn">Get started</button></div></section>
-<script>
-let lang="en",selected=-1;
-const countries=[["🇮🇳","India","भारत"],["🇺🇸","United States","अमेरिका"],["🇷🇺","Russia","रूस"],["🇨🇳","China","चीन"],["🇰🇵","North Korea","उत्तर कोरिया"],["🇮🇱","Israel","इज़राइल"],["🇮🇷","Iran","ईरान"],["🇯🇵","Japan","जापान"],["🇵🇰","Pakistan","पाकिस्तान"],["🇬🇧","United Kingdom","ब्रिटेन"]];
-const roles=[["🏛️","Government","सरकार"],["🗳️","Elections","चुनाव"],["🛡️","Police & Justice","पुलिस और न्याय"],["🪖","Defence","रक्षा"],["🕵️","Intelligence","खुफिया विभाग"],["💼","Business & Finance","व्यापार और वित्त"],["🌍","Diplomacy","कूटनीति"],["📰","Public Affairs","जनसंपर्क"]];
-const words={en:{title:"Build your nation. Shape the world.",intro:"A multiplayer government and world strategy game. Choose a country and apply for a role.",notice:"Preview version — online accounts and real multiplayer are not connected yet.",countries:"Choose a country",roles:"Government & public service",next:"Your next step",apply:"Apply for a position",applyText:"Choose a country first. Your application system will be added in the next version.",btn:"Get started",chosen:"Selected country: "},hi:{title:"अपना देश चलाओ। दुनिया बदलो।",intro:"सरकार और विश्व रणनीति पर आधारित multiplayer गेम। देश चुनें और पद के लिए आवेदन करें।",notice:"यह शुरुआती preview है — online accounts और multiplayer अभी जुड़े नहीं हैं।",countries:"अपना देश चुनें",roles:"सरकार और सार्वजनिक सेवाएँ",next:"आपका अगला कदम",apply:"पद के लिए आवेदन करें",applyText:"पहले देश चुनें। आवेदन प्रणाली अगले version में जोड़ी जाएगी।",btn:"शुरू करें",chosen:"चुना गया देश: "}};
-function render(){let w=words[lang];document.documentElement.lang=lang==="hi"?"hi":"en";document.getElementById("title").textContent=w.title;document.getElementById("intro").textContent=w.intro;document.getElementById("notice").textContent=w.notice;document.getElementById("countriesTitle").textContent=w.countries;document.getElementById("rolesTitle").textContent=w.roles;document.getElementById("actionsTitle").textContent=w.next;document.getElementById("applyTitle").textContent=w.apply;document.getElementById("applyText").textContent=(selected<0?"":w.chosen+countries[selected][lang==="hi"?2:1]+". ")+w.applyText;document.getElementById("applyBtn").textContent=w.btn;document.getElementById("lang").textContent=lang==="en"?"🌐 हिन्दी":"🌐 English";document.getElementById("countries").innerHTML=countries.map((c,i)=>`<button class="card" style="text-align:left;${selected===i?"border:2px solid #7dd3a9":""}" onclick="selectCountry(${i})"><span>${c[0]}</span><b>${c[lang==="hi"?2:1]}</b><span class="small">${selected===i?(lang==="en"?"Selected":"चुना गया"):(lang==="en"?"Select country":"देश चुनें")}</span></button>`).join("");document.getElementById("roles").innerHTML=roles.map(r=>`<div class="card"><span>${r[0]}</span><b>${r[lang==="hi"?2:1]}</b></div>`).join("")}
-function toggleLang(){lang=lang==="en"?"hi":"en";render()}function selectCountry(i){selected=i;render()}render();
+<header>
+<h1>🌐 WORLD POWER ONLINE</h1>
+<button class="secondary" id="languageBtn">हिन्दी</button>
+</header>
+<main>
+<p id="tagline">Build your nation. Shape the world.</p>
+<div class="notice" id="notice">Create an account to start your journey.</div>
+
+<section class="panel" id="authPanel">
+<h2 id="authTitle">Player Registration / Login</h2>
+<p class="muted" id="authIntro">Use your email. Password must contain at least 6 characters.</p>
+<label id="emailLabel" for="email">Email</label>
+<input id="email" type="email" autocomplete="email" placeholder="you@example.com">
+<label id="passwordLabel" for="password">Password</label>
+<input id="password" type="password" autocomplete="current-password" minlength="6" placeholder="At least 6 characters">
+<div>
+<button id="registerBtn">Create Account</button>
+<button class="secondary" id="loginBtn">Log In</button>
+</div>
+<p id="authMessage" class="muted"></p>
+</section>
+
+<section class="panel hidden" id="gamePanel">
+<p id="userEmail" class="muted"></p>
+<button class="danger" id="logoutBtn">Log Out</button>
+<h2 id="countryHeading">Choose your country</h2>
+<p id="countryIntro" class="muted">Select one country.</p>
+<div class="grid" id="countries"></div>
+
+<label id="roleLabel" for="role">Preferred role</label>
+<select id="role">
+<option value="Citizen">Citizen</option>
+<option value="Applicant">Government applicant</option>
+<option value="Business">Business leader</option>
+<option value="Police">Police department</option>
+<option value="PublicService">Public service</option>
+</select>
+
+<label id="nameLabel" for="displayName">Player name</label>
+<input id="displayName" maxlength="24" placeholder="Game display name">
+<button id="saveBtn">Save Profile</button>
+<p id="profileMessage" class="muted"></p>
+<div class="panel">
+<h2 id="profileHeading">Your Profile</h2>
+<p id="profileSummary" class="muted">Choose a country and save your profile.</p>
+</div>
+</section>
+<p class="muted">World Power Online — early prototype. More game systems will be added later.</p>
+</main>
+
+<script type="module">
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+ getAuth, createUserWithEmailAndPassword,
+ signInWithEmailAndPassword, onAuthStateChanged, signOut
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+/* REPLACE THESE VALUES WITH YOUR FIREBASE WEB CONFIG */
+const firebaseConfig = {
+ apiKey: "PASTE_YOUR_API_KEY",
+ authDomain: "PASTE_YOUR_AUTH_DOMAIN",
+ projectId: "PASTE_YOUR_PROJECT_ID",
+ storageBucket: "PASTE_YOUR_STORAGE_BUCKET",
+ messagingSenderId: "PASTE_YOUR_MESSAGING_SENDER_ID",
+ appId: "PASTE_YOUR_APP_ID"
+};
+
+const $ = id => document.getElementById(id);
+
+const countries = [
+ {flag:"🇮🇳",en:"India",hi:"भारत"},
+ {flag:"🇺🇸",en:"America",hi:"अमेरिका"},
+ {flag:"🇷🇺",en:"Russia",hi:"रूस"},
+ {flag:"🇨🇳",en:"China",hi:"चीन"},
+ {flag:"🇰🇵",en:"North Korea",hi:"उत्तर कोरिया"},
+ {flag:"🇮🇱",en:"Israel",hi:"इज़राइल"},
+ {flag:"🇮🇷",en:"Iran",hi:"ईरान"},
+ {flag:"🇯🇵",en:"Japan",hi:"जापान"},
+ {flag:"🇵🇰",en:"Pakistan",hi:"पाकिस्तान"},
+ {flag:"🇬🇧",en:"United Kingdom",hi:"ब्रिटेन"}
+];
+
+const translations = {
+ en:{
+  tagline:"Build your nation. Shape the world.",
+  notice:"Create an account to start your journey.",
+  authTitle:"Player Registration / Login",
+  authIntro:"Use your email. Password must contain at least 6 characters.",
+  email:"Email",password:"Password",register:"Create Account",login:"Log In",
+  logout:"Log Out",countryHeading:"Choose your country",
+  countryIntro:"Select one country for your profile.",
+  role:"Preferred role",name:"Player name",save:"Save Profile",
+  profile:"Your Profile",choose:"Choose a country and save your profile.",
+  roles:["Citizen","Government applicant","Business leader","Police department","Public service"],
+  saved:"Profile saved on this device.",
+  noCountry:"Please choose a country first.",
+  noName:"Please enter a player name.",
+  ready:"You are logged in. Choose your country.",
+  created:"Account created successfully.",
+  loggedIn:"Login successful.",
+  loggedOut:"You have logged out.",
+  invalid:"Enter a valid email and a password of at least 6 characters.",
+  line:"Player: {name} | Country: {country} | Role: {role}",
+  failed:"Error: "
+ },
+ hi:{
+  tagline:"अपने देश का निर्माण करो। दुनिया को आकार दो।",
+  notice:"शुरू करने के लिए अपना account बनाओ।",
+  authTitle:"Player Registration / Login",
+  authIntro:"अपना email इस्तेमाल करो। Password कम से कम 6 अक्षरों का हो।",
+  email:"ईमेल",password:"पासवर्ड",register:"Account बनाओ",login:"Login करो",
+  logout:"Logout",countryHeading:"अपना देश चुनो",
+  countryIntro:"अपनी प्रोफाइल के लिए एक देश चुनो।",
+  role:"अपनी भूमिका चुनो",name:"गेम में दिखने वाला नाम",
+  save:"प्रोफाइल सेव करो",profile:"तुम्हारी प्रोफाइल",
+  choose:"देश चुनो और अपनी प्रोफाइल सेव करो।",
+  roles:["नागरिक","सरकारी पद का आवेदनकर्ता","व्यवसायी","पुलिस विभाग","जनसेवा"],
+  saved:"प्रोफाइल इस डिवाइस पर सेव हो गई।",
+  noCountry:"पहले अपना देश चुनो।",
+  noName:"गेम में दिखने वाला नाम लिखो।",
+  ready:"Login हो गया। अब अपना देश चुनो।",
+  created:"Account सफलतापूर्वक बन गया।",
+  loggedIn:"Login सफल रहा।",
+  loggedOut:"Logout हो गया।",
+  invalid:"सही email और कम से कम 6 अक्षरों का password डालो।",
+  line:"खिलाड़ी: {name} | देश: {country} | भूमिका: {role}",
+  failed:"त्रुटि: "
+ }
+};
+
+let lang = "en";
+let selectedCountry = "";
+let auth = null;
+let firebaseReady = false;
+
+function t(key){return translations[lang][key] || key;}
+
+function message(id,text,error=false){
+ $(id).textContent=text;
+ $(id).className=error?"muted error":"muted";
+}
+
+function renderCountries(){
+ const container=$("countries");
+ container.innerHTML="";
+ countries.forEach(c=>{
+  const b=document.createElement("button");
+  b.type="button";
+  b.className="country"+(selectedCountry===c.en?" active":"");
+  const flag=document.createElement("span");
+  flag.className="flag";
+  flag.textContent=c.flag+" ";
+  const name=document.createElement("strong");
+  name.textContent=lang==="en"?c.en:c.hi;
+  b.append(flag,name);
+  b.addEventListener("click",()=>{
+   selectedCountry=c.en;
+   renderCountries();
+  });
+  container.appendChild(b);
+ });
+}
+
+function applyLanguage(){
+ const map={
+  tagline:"tagline",notice:"notice",authTitle:"authTitle",
+  authIntro:"authIntro",emailLabel:"email",passwordLabel:"password",
+  registerBtn:"register",loginBtn:"login",logoutBtn:"logout",
+  countryHeading:"countryHeading",countryIntro:"countryIntro",
+  roleLabel:"role",nameLabel:"name",saveBtn:"save",
+  profileHeading:"profile"
+ };
+ Object.keys(map).forEach(id=>$(id).textContent=t(map[id]));
+ $("languageBtn").textContent=lang==="en"?"हिन्दी":"English";
+ const vals=["Citizen","Applicant","Business","Police","PublicService"];
+ $("role").innerHTML="";
+ vals.forEach((v,i)=>{
+  const opt=document.createElement("option");
+  opt.value=v;
+  opt.textContent=t("roles")[i];
+  $("role").appendChild(opt);
+ });
+ renderCountries();
+}
+
+$("languageBtn").addEventListener("click",()=>{
+ lang=lang==="en"?"hi":"en";
+ applyLanguage();
+});
+
+function friendlyError(code){
+ const errors={
+  "auth/email-already-in-use":"This email already has an account.",
+  "auth/invalid-email":"Invalid email address.",
+  "auth/weak-password":"Choose a stronger password.",
+  "auth/invalid-credential":"Email or password is incorrect.",
+  "auth/network-request-failed":"Check your internet connection.",
+  "auth/too-many-requests":"Too many attempts. Try again later.",
+  "auth/operation-not-allowed":"Enable Email/Password in Firebase Authentication."
+ };
+ return errors[code]||code||"Unknown error";
+}
+
+try{
+ const valid =
+  firebaseConfig.apiKey!=="PASTE_YOUR_API_KEY" &&
+  firebaseConfig.authDomain!=="PASTE_YOUR_AUTH_DOMAIN" &&
+  firebaseConfig.projectId!=="PASTE_YOUR_PROJECT_ID" &&
+  firebaseConfig.appId!=="PASTE_YOUR_APP_ID";
+
+ if(!valid) throw new Error("CONFIG_MISSING");
+
+ const app=initializeApp(firebaseConfig);
+ auth=getAuth(app);
+ firebaseReady=true;
+
+ onAuthStateChanged(auth,user=>{
+  $("authPanel").classList.toggle("hidden",!!user);
+  $("gamePanel").classList.toggle("hidden",!user);
+
+  if(user){
+   $("userEmail").textContent=user.email||"";
+   loadProfile(user.uid);
+   message("profileMessage",t("ready"));
+  }
+ });
+}catch(e){
+ if(e.message==="CONFIG_MISSING"){
+  message("authMessage","Firebase configuration is not filled in.",true);
+ }else{
+  message("authMessage","Firebase setup error. Check your configuration.",true);
+ }
+}
+
+$("registerBtn").addEventListener("click",async()=>{
+ const email=$("email").value.trim();
+ const password=$("password").value;
+ if(!firebaseReady){
+  message("authMessage","Fill in the Firebase configuration first.",true);
+  return;
+ }
+ if(!email||password.length<6){
+  message("authMessage",t("invalid"),true);
+  return;
+ }
+ try{
+  await createUserWithEmailAndPassword(auth,email,password);
+  message("authMessage",t("created"));
+ }catch(e){
+  message("authMessage",t("failed")+friendlyError(e.code),true);
+ }
+});
+
+$("loginBtn").addEventListener("click",async()=>{
+ const email=$("email").value.trim();
+ const password=$("password").value;
+ if(!firebaseReady){
+  message("authMessage","Fill in the Firebase configuration first.",true);
+  return;
+ }
+ if(!email||password.length<6){
+  message("authMessage",t("invalid"),true);
+  return;
+ }
+ try{
+  await signInWithEmailAndPassword(auth,email,password);
+  message("authMessage",t("loggedIn"));
+ }catch(e){
+  message("authMessage",t("failed")+friendlyError(e.code),true);
+ }
+});
+
+$("logoutBtn").addEventListener("click",async()=>{
+ try{
+  await signOut(auth);
+  message("authMessage",t("loggedOut"));
+ }catch(e){
+  message("profileMessage",t("failed")+friendlyError(e.code),true);
+ }
+});
+
+function saveKey(uid){return "wpo-profile-"+uid;}
+
+function loadProfile(uid){
+ try{
+  const p=JSON.parse(localStorage.getItem(saveKey(uid))||"null");
+  if(!p)return;
+  selectedCountry=p.country||"";
+  $("displayName").value=p.name||"";
+  $("role").value=p.role||"Citizen";
+  renderCountries();
+  showProfile(p);
+ }catch(e){}
+}
+
+function showProfile(p){
+ const c=countries.find(x=>x.en===p.country);
+ const country=c?(lang==="en"?c.en:c.hi):p.country;
+ const vals=["Citizen","Applicant","Business","Police","PublicService"];
+ const i=vals.indexOf(p.role);
+ $("profileSummary").textContent=t("line")
+  .replace("{name}",p.name)
+  .replace("{country}",country)
+  .replace("{role}",t("roles")[Math.max(0,i)]);
+}
+
+$("saveBtn").addEventListener("click",()=>{
+ const user=auth?auth.currentUser:null;
+ if(!user){
+  message("profileMessage","Please log in first.",true);
+  return;
+ }
+ const name=$("displayName").value.trim();
+ if(!selectedCountry){
+  message("profileMessage",t("noCountry"),true);
+  return;
+ }
+ if(!name){
+  message("profileMessage",t("noName"),true);
+  return;
+ }
+ const p={country:selectedCountry,name,role:$("role").value};
+ try{
+  localStorage.setItem(saveKey(user.uid),JSON.stringify(p));
+  showProfile(p);
+  message("profileMessage",t("saved"));
+ }catch(e){
+  message("profileMessage","Could not save profile on this device.",true);
+ }
+});
+
+applyLanguage();
 </script>
 </body>
 </html>
