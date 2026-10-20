@@ -86,7 +86,13 @@ import {
  getAuth, createUserWithEmailAndPassword,
  signInWithEmailAndPassword, onAuthStateChanged, signOut
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
+import {
+  getFirestore,
+  doc,
+  getDoc,
+  setDoc,
+  serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 /* REPLACE THESE VALUES WITH YOUR FIREBASE WEB CONFIG */
 const firebaseConfig = {
  apiKey: "AIzaSyBGJYjRaaKRKiywUW6c38zo_yBEQKQy09s",
@@ -243,6 +249,7 @@ try{
  if(!valid) throw new Error("CONFIG_MISSING");
 
  const app=initializeApp(firebaseConfig);
+ const db = getFirestore(app);
  auth=getAuth(app);
  firebaseReady=true;
 
@@ -313,18 +320,25 @@ $("logoutBtn").addEventListener("click",async()=>{
 
 function saveKey(uid){return "wpo-profile-"+uid;}
 
-function loadProfile(uid){
+async function loadProfile(uid){
  try{
-  const p=JSON.parse(localStorage.getItem(saveKey(uid))||"null");
-  if(!p)return;
-  selectedCountry=p.country||"";
-  $("displayName").value=p.name||"";
-  $("role").value=p.role||"Citizen";
+  const profileRef = doc(db, "players", uid);
+  const profileSnap = await getDoc(profileRef);
+
+  if(!profileSnap.exists()) return;
+
+  const p = profileSnap.data();
+
+  selectedCountry = p.country || "";
+  $("displayName").value = p.name || "";
+  $("role").value = p.role || "Citizen";
+
   renderCountries();
   showProfile(p);
- }catch(e){}
+ }catch(e){
+  console.error("Profile load error:", e);
+ }
 }
-
 function showProfile(p){
  const c=countries.find(x=>x.en===p.country);
  const country=c?(lang==="en"?c.en:c.hi):p.country;
@@ -336,7 +350,7 @@ function showProfile(p){
   .replace("{role}",t("roles")[Math.max(0,i)]);
 }
 
-$("saveBtn").addEventListener("click",()=>{
+$("saveBtn").addEventListener("click",async()=>{
  const user=auth?auth.currentUser:null;
  if(!user){
   message("profileMessage","Please log in first.",true);
@@ -352,9 +366,13 @@ $("saveBtn").addEventListener("click",()=>{
   return;
  }
  const p={country:selectedCountry,name,role:$("role").value};
- try{
-  localStorage.setItem(saveKey(user.uid),JSON.stringify(p));
-  showProfile(p);
+ try{ 
+  await setDoc(doc(db, "players", user.uid), {
+  name: p.name,
+  country: p.country,
+  role: p.role,
+  updatedAt: serverTimestamp()
+});
   message("profileMessage",t("saved"));
  }catch(e){
   message("profileMessage","Could not save profile on this device.",true);
