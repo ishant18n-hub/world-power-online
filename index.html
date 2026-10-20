@@ -350,38 +350,51 @@ function showProfile(p){
   .replace("{role}",t("roles")[Math.max(0,i)]);
 }
 
-$("saveBtn").addEventListener("click",async()=>{
- const user=auth?auth.currentUser:null;
- if(!user){
-  message("profileMessage","Please log in first.",true);
-  return;
- }
- const name=$("displayName").value.trim();
- if(!selectedCountry){
-  message("profileMessage",t("noCountry"),true);
-  return;
- }
- if(!name){
-  message("profileMessage",t("noName"),true);
-  return;
- }
- const p={country:selectedCountry,name,role:$("role").value};
- try{ 
-  await setDoc(doc(db, "players", user.uid), {
-  name: p.name,
-  country: p.country,
-  role: p.role,
-  updatedAt: serverTimestamp()
-});
-  message("profileMessage",t("saved"));
- }catch(e){
-  console.error("Profile save error:", e);
-  message(
-    "profileMessage",
-    "Online save failed: " + (e.code || e.message || "Unknown error"),
-    true
-  );
- }
+$("saveBtn").addEventListener("click", async () => {
+  const user = auth ? auth.currentUser : null;
+
+  if (!user) {
+    message("profileMessage", "Please log in first.", true);
+    return;
+  }
+
+  const name = $("displayName").value.trim();
+
+  if (!selectedCountry) {
+    message("profileMessage", t("noCountry"), true);
+    return;
+  }
+
+  if (!name) {
+    message("profileMessage", t("noName"), true);
+    return;
+  }
+
+  const p = {
+    country: selectedCountry,
+    name: name,
+    role: $("role").value
+  };
+
+  try {
+    await setDoc(doc(db, "players", user.uid), {
+      name: p.name,
+      country: p.country,
+      role: p.role,
+      updatedAt: serverTimestamp()
+    });
+
+    showProfile(p);
+    message("profileMessage", "Profile saved online successfully!");
+  } catch (e) {
+    console.error("Profile save error:", e);
+
+    message(
+      "profileMessage",
+      "Save error: " + (e.code || e.message || "Unknown error"),
+      true
+    );
+  }
 });
 
 applyLanguage();
