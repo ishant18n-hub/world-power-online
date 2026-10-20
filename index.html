@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -79,21 +80,19 @@ button{padding:11px 14px;background:#60a5fa;color:#071426;border:0;border-radius
 </main>
 
 <script type="module">
-import { initializeApp }
+import {initializeApp}
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
 import {
- getAuth, createUserWithEmailAndPassword,
- signInWithEmailAndPassword, onAuthStateChanged, signOut
+ getAuth,createUserWithEmailAndPassword,
+ signInWithEmailAndPassword,onAuthStateChanged,signOut
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
 import {
-  getFirestore,
-  doc,
-  getDoc,
-  setDoc,
-  serverTimestamp
+ getFirestore,doc,getDoc,setDoc,serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-/* REPLACE THESE VALUES WITH YOUR FIREBASE WEB CONFIG */
+
+/* Keep your actual Firebase web config here. */
 const firebaseConfig = {
  apiKey: "AIzaSyBGJYjRaaKRKiywUW6c38zo_yBEQKQy09s",
  authDomain: "world-power-online.firebaseapp.com",
@@ -130,7 +129,7 @@ const translations = {
   role:"Preferred role",name:"Player name",save:"Save Profile",
   profile:"Your Profile",choose:"Choose a country and save your profile.",
   roles:["Citizen","Government applicant","Business leader","Police department","Public service"],
-  saved:"Profile saved on this device.",
+  saved:"Profile saved online successfully.",
   noCountry:"Please choose a country first.",
   noName:"Please enter a player name.",
   ready:"You are logged in. Choose your country.",
@@ -153,12 +152,12 @@ const translations = {
   save:"प्रोफाइल सेव करो",profile:"तुम्हारी प्रोफाइल",
   choose:"देश चुनो और अपनी प्रोफाइल सेव करो।",
   roles:["नागरिक","सरकारी पद का आवेदनकर्ता","व्यवसायी","पुलिस विभाग","जनसेवा"],
-  saved:"प्रोफाइल इस डिवाइस पर सेव हो गई।",
+  saved:"प्रोफाइल ऑनलाइन सेव हो गई।",
   noCountry:"पहले अपना देश चुनो।",
   noName:"गेम में दिखने वाला नाम लिखो।",
   ready:"Login हो गया। अब अपना देश चुनो।",
   created:"Account सफलतापूर्वक बन गया।",
-  loggedIn:"Login सफल रहा।",
+  loggedIn:"Login सफल रहा.",
   loggedOut:"Logout हो गया।",
   invalid:"सही email और कम से कम 6 अक्षरों का password डालो।",
   line:"खिलाड़ी: {name} | देश: {country} | भूमिका: {role}",
@@ -169,9 +168,12 @@ const translations = {
 let lang = "en";
 let selectedCountry = "";
 let auth = null;
+let db = null;
 let firebaseReady = false;
 
-function t(key){return translations[lang][key] || key;}
+function t(key){
+ return translations[lang][key] || key;
+}
 
 function message(id,text,error=false){
  $(id).textContent=text;
@@ -208,9 +210,13 @@ function applyLanguage(){
   roleLabel:"role",nameLabel:"name",saveBtn:"save",
   profileHeading:"profile"
  };
- Object.keys(map).forEach(id=>$(id).textContent=t(map[id]));
+ Object.keys(map).forEach(id=>{
+  $(id).textContent=t(map[id]);
+ });
  $("languageBtn").textContent=lang==="en"?"हिन्दी":"English";
+
  const vals=["Citizen","Applicant","Business","Police","PublicService"];
+ const oldRole=$("role").value;
  $("role").innerHTML="";
  vals.forEach((v,i)=>{
   const opt=document.createElement("option");
@@ -218,6 +224,7 @@ function applyLanguage(){
   opt.textContent=t("roles")[i];
   $("role").appendChild(opt);
  });
+ $("role").value=vals.includes(oldRole)?oldRole:"Citizen";
  renderCountries();
 }
 
@@ -234,48 +241,80 @@ function friendlyError(code){
   "auth/invalid-credential":"Email or password is incorrect.",
   "auth/network-request-failed":"Check your internet connection.",
   "auth/too-many-requests":"Too many attempts. Try again later.",
-  "auth/operation-not-allowed":"Enable Email/Password in Firebase Authentication."
+  "auth/operation-not-allowed":"Enable Email/Password in Firebase Authentication.",
+  "permission-denied":"Firestore permission denied. Check Firestore Rules."
  };
  return errors[code]||code||"Unknown error";
 }
 
+function showProfile(p){
+ const c=countries.find(x=>x.en===p.country);
+ const country=c?(lang==="en"?c.en:c.hi):p.country;
+ const vals=["Citizen","Applicant","Business","Police","PublicService"];
+ const i=vals.indexOf(p.role);
+ $("profileSummary").textContent=t("line")
+  .replace("{name}",p.name||"")
+  .replace("{country}",country||"")
+  .replace("{role}",t("roles")[Math.max(0,i)]);
+}
+
+/* Initialise Firebase once. */
 try{
- const valid =
-  firebaseConfig.apiKey!=="AIzaSyBGJYjRaaKRKiywUW6c38zo_yBEQKQy09s" &&
-  firebaseConfig.authDomain!=="world-power-online.firebaseapp.com" &&
-  firebaseConfig.projectId!=="world-power-online" &&
-  firebaseConfig.appId!=="1:345036554675:web:f85399cfc5bd69cbab4bc6";
+ const values=[
+  firebaseConfig.apiKey,
+  firebaseConfig.authDomain,
+  firebaseConfig.projectId,
+  firebaseConfig.appId
+ ];
+ const placeholders=["YOUR_API_KEY","YOUR_AUTH_DOMAIN","YOUR_PROJECT_ID","YOUR_APP_ID"];
+
+ const valid=values.every((v,i)=>
+  typeof v==="string" &&
+  v.trim()!=="" &&
+  !v.includes("YOUR_") &&
+  !v.includes("PASTE_") &&
+  !v.includes("REPLACE_") &&
+  v!==placeholders[i]
+ );
 
  if(!valid) throw new Error("CONFIG_MISSING");
 
  const app=initializeApp(firebaseConfig);
- const db = getFirestore(app);
  auth=getAuth(app);
+ db=getFirestore(app);
  firebaseReady=true;
 
- onAuthStateChanged(auth,user=>{
+ onAuthStateChanged(auth,async user=>{
   $("authPanel").classList.toggle("hidden",!!user);
   $("gamePanel").classList.toggle("hidden",!user);
 
   if(user){
    $("userEmail").textContent=user.email||"";
-   loadProfile(user.uid);
    message("profileMessage",t("ready"));
+   await loadProfile(user.uid);
+  }else{
+   selectedCountry="";
+   $("displayName").value="";
+   $("profileSummary").textContent=t("choose");
   }
  });
 }catch(e){
- if(e.message==="CONFIG_MISSING"){
-  message("authMessage","Firebase configuration is not filled in.",true);
- }else{
-  message("authMessage","Firebase setup error. Check your configuration.",true);
- }
+ console.error("Firebase initialisation error:",e);
+ message(
+  "authMessage",
+  e.message==="CONFIG_MISSING"
+   ?"Firebase configuration is incomplete. Check firebaseConfig."
+   :"Firebase setup error: "+(e.message||"Unknown error"),
+  true
+ );
 }
 
 $("registerBtn").addEventListener("click",async()=>{
  const email=$("email").value.trim();
  const password=$("password").value;
+
  if(!firebaseReady){
-  message("authMessage","Fill in the Firebase configuration first.",true);
+  message("authMessage","Check Firebase configuration first.",true);
   return;
  }
  if(!email||password.length<6){
@@ -286,6 +325,7 @@ $("registerBtn").addEventListener("click",async()=>{
   await createUserWithEmailAndPassword(auth,email,password);
   message("authMessage",t("created"));
  }catch(e){
+  console.error("Registration error:",e);
   message("authMessage",t("failed")+friendlyError(e.code),true);
  }
 });
@@ -293,8 +333,9 @@ $("registerBtn").addEventListener("click",async()=>{
 $("loginBtn").addEventListener("click",async()=>{
  const email=$("email").value.trim();
  const password=$("password").value;
+
  if(!firebaseReady){
-  message("authMessage","Fill in the Firebase configuration first.",true);
+  message("authMessage","Check Firebase configuration first.",true);
   return;
  }
  if(!email||password.length<6){
@@ -305,6 +346,7 @@ $("loginBtn").addEventListener("click",async()=>{
   await signInWithEmailAndPassword(auth,email,password);
   message("authMessage",t("loggedIn"));
  }catch(e){
+  console.error("Login error:",e);
   message("authMessage",t("failed")+friendlyError(e.code),true);
  }
 });
@@ -314,87 +356,83 @@ $("logoutBtn").addEventListener("click",async()=>{
   await signOut(auth);
   message("authMessage",t("loggedOut"));
  }catch(e){
+  console.error("Logout error:",e);
   message("profileMessage",t("failed")+friendlyError(e.code),true);
  }
 });
 
-function saveKey(uid){return "wpo-profile-"+uid;}
-
 async function loadProfile(uid){
  try{
-  const profileRef = doc(db, "players", uid);
-  const profileSnap = await getDoc(profileRef);
+  const snap=await getDoc(doc(db,"players",uid));
+  if(!snap.exists()) return;
 
-  if(!profileSnap.exists()) return;
-
-  const p = profileSnap.data();
-
-  selectedCountry = p.country || "";
-  $("displayName").value = p.name || "";
-  $("role").value = p.role || "Citizen";
+  const p=snap.data();
+  selectedCountry=p.country||"";
+  $("displayName").value=p.name||"";
+  $("role").value=p.role||"Citizen";
 
   renderCountries();
   showProfile(p);
  }catch(e){
-  console.error("Profile load error:", e);
+  console.error("Profile load error:",e);
+  message("profileMessage","Profile load error: "+(e.code||e.message),true);
  }
 }
-function showProfile(p){
- const c=countries.find(x=>x.en===p.country);
- const country=c?(lang==="en"?c.en:c.hi):p.country;
- const vals=["Citizen","Applicant","Business","Police","PublicService"];
- const i=vals.indexOf(p.role);
- $("profileSummary").textContent=t("line")
-  .replace("{name}",p.name)
-  .replace("{country}",country)
-  .replace("{role}",t("roles")[Math.max(0,i)]);
-}
 
-$("saveBtn").addEventListener("click", async () => {
-  const user = auth ? auth.currentUser : null;
+$("saveBtn").addEventListener("click",async()=>{
+ const user=auth?auth.currentUser:null;
 
-  if (!user) {
-    message("profileMessage", "Please log in first.", true);
-    return;
-  }
+ if(!user){
+  message("profileMessage","Please log in first.",true);
+  return;
+ }
 
-  const name = $("displayName").value.trim();
+ const name=$("displayName").value.trim();
+ const allowedRoles=["Citizen","Applicant","Business","Police","PublicService"];
 
-  if (!selectedCountry) {
-    message("profileMessage", t("noCountry"), true);
-    return;
-  }
+ if(!selectedCountry){
+  message("profileMessage",t("noCountry"),true);
+  return;
+ }
+ if(!name){
+  message("profileMessage",t("noName"),true);
+  return;
+ }
+ if(name.length>24){
+  message("profileMessage","Player name must be 24 characters or less.",true);
+  return;
+ }
+ if(!countries.some(c=>c.en===selectedCountry)){
+  message("profileMessage","Invalid country selection.",true);
+  return;
+ }
 
-  if (!name) {
-    message("profileMessage", t("noName"), true);
-    return;
-  }
+ const role=$("role").value;
+ if(!allowedRoles.includes(role)){
+  message("profileMessage","Invalid role selection.",true);
+  return;
+ }
 
-  const p = {
-    country: selectedCountry,
-    name: name,
-    role: $("role").value
-  };
+ const p={country:selectedCountry,name,role};
 
-  try {
-    await setDoc(doc(db, "players", user.uid), {
-      name: p.name,
-      country: p.country,
-      role: p.role,
-      updatedAt: serverTimestamp()
-    });
+ try{
+  await setDoc(doc(db,"players",user.uid),{
+   name:p.name,
+   country:p.country,
+   role:p.role,
+   updatedAt:serverTimestamp()
+  });
 
-    showProfile(p);
-    message("profileMessage", "Profile saved online successfully!");
-  } catch (e) {
-    console.error("Profile save error:", e);
-
-    message(
-      "profileMessage",
-      "Save error: " + (e.code || e.message || "Unknown error"),
-      true
-    );
-  }
+  showProfile(p);
+  message("profileMessage",t("saved"));
+ }catch(e){
+  console.error("Profile save error:",e);
+  message(
+   "profileMessage",
+   "Save error: "+(e.code||e.message||"Unknown error"),
+   true
+  );
+ }
 });
 
 applyLanguage();
