@@ -4,127 +4,203 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0b1220">
 <title>World Power Online</title>
 <style>
+:root{--bg:#08111f;--panel:#121e30;--line:#293a52;--text:#edf4ff;--muted:#aebed3;--blue:#75b7ff;--green:#70dfb1;--red:#ff899b;--amber:#ffd27a}
 *{box-sizing:border-box}
-body{margin:0;background:#0b1220;color:#edf3ff;font-family:Arial,sans-serif}
-header{padding:16px;background:#151f31;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
-h1{font-size:21px;margin:0}
-main{max-width:900px;margin:auto;padding:14px}
-.panel{background:#151f31;border:1px solid #2a3951;border-radius:14px;padding:15px;margin:14px 0}
-h2{font-size:20px}
-input,select{width:100%;padding:12px;margin:6px 0 12px;background:#0b1424;color:white;border:1px solid #40516b;border-radius:8px;font-size:16px}
-button{padding:11px 13px;background:#60a5fa;color:#071426;border:0;border-radius:8px;font-weight:bold;font-size:14px;margin:4px;cursor:pointer}
-button:disabled{opacity:.5;cursor:not-allowed}
-.secondary{background:#304158;color:white}
-.danger{background:#a83249;color:white}
-.muted{color:#b6c4d8;font-size:14px;line-height:1.6}
-.notice{padding:12px;background:#12332f;border-radius:8px;color:#b7f7dc}
-.error{color:#ffb8c3}
+body{margin:0;background:radial-gradient(circle at top,#14243b 0,#08111f 45%);color:var(--text);font-family:system-ui,-apple-system,Arial,sans-serif;line-height:1.45}
+header{position:sticky;top:0;z-index:5;background:#101b2bed;border-bottom:1px solid var(--line);padding:12px max(14px,calc((100vw - 1100px)/2));display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.brand{font-size:17px;font-weight:900;letter-spacing:.3px}
+.brand small{display:block;font-size:10px;color:var(--muted);font-weight:600;letter-spacing:1.4px}
+main{max-width:1100px;margin:auto;padding:14px}
+.panel{background:linear-gradient(145deg,#142238,#101a2a);border:1px solid var(--line);border-radius:16px;padding:16px;margin:13px 0;box-shadow:0 8px 24px #0002}
+h2{font-size:20px;margin-bottom:8px}
+h3{font-size:16px;margin-bottom:7px}
+p{margin-top:0}
+.muted{color:var(--muted);font-size:13px;line-height:1.6}
+.small{font-size:11px;color:var(--muted)}
+label{display:block;font-size:13px;color:#c9d8eb;margin:8px 0 4px}
+input,select{width:100%;padding:12px;background:#091322;color:white;border:1px solid #3a4e69;border-radius:9px;font-size:16px}
+button{border:0;border-radius:10px;padding:11px 13px;font-weight:750;font-size:13px;background:var(--blue);color:#071426;cursor:pointer;transition:transform .12s,filter .12s;margin:3px}
+button:hover{filter:brightness(1.06)}
+button:active{transform:scale(.985)}
+button:disabled{opacity:.45;cursor:not-allowed}
+.secondary{background:#2a3c54;color:#f1f6ff}
+.danger{background:#a83c53;color:#fff}
+.green{background:#246d56;color:white}
 .hidden{display:none!important}
+.notice{padding:12px;border-radius:10px;background:#12372f;border:1px solid #286b58;color:#c5ffe7;font-size:13px;margin:10px 0}
+.error{color:#ff9eac}
 .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
-.country{background:#101a2b;color:white;border:1px solid #40516b;text-align:left;min-height:60px}
-.country.active{border:2px solid #60a5fa;background:#1c3454}
-.dashboard-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
-.dash-card{background:#101a2b;color:#edf3ff;border:1px solid #40516b;border-radius:12px;padding:15px 10px;min-height:95px;text-align:left}
-.dash-card strong,.dash-card span{display:block}
-.dash-card span{font-size:12px;color:#b6c4d8;margin-top:7px;line-height:1.5}
+.country-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.country{background:#0c1728;border:1px solid var(--line);color:var(--text);text-align:left;min-height:48px}
+.country.active{border:2px solid var(--blue);background:#193352}
 .stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
-.stat{background:#0b1424;padding:13px;border-radius:10px;border:1px solid #304158}
-.stat small{display:block;color:#b6c4d8;margin-bottom:8px}
-.stat strong{font-size:22px}
-.action{display:block;width:100%;text-align:left;margin:8px 0;background:#22354c;color:white;border:1px solid #40516b}
-.action span{display:block;font-size:12px;font-weight:normal;color:#c4d1e3;margin-top:5px}
-@media(min-width:600px){.grid,.dashboard-grid,.stats{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.stat{padding:13px;border-radius:12px;background:#0a1423;border:1px solid #263950;min-width:0}
+.stat small{display:block;color:var(--muted);font-size:11px;margin-bottom:6px}
+.stat strong{font-size:22px;overflow-wrap:anywhere}
+.stat .delta{font-size:11px;color:var(--muted);display:block;margin-top:4px}
+.dashboard-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.dash-card{min-height:92px;text-align:left;background:#0b1728;color:var(--text);border:1px solid #30445e;border-radius:13px;padding:13px}
+.dash-card strong,.dash-card span{display:block}
+.dash-card strong{font-size:14px}
+.dash-card span{font-weight:400;font-size:11px;color:var(--muted);margin-top:6px}
+.topline{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.budget-pill{border:1px solid #38624f;background:#102d27;color:#a8f5d4;padding:8px 11px;border-radius:99px;font-weight:800;font-size:13px}
+.action{display:block;width:100%;text-align:left;margin:8px 0;background:#1a2b40;color:var(--text);border:1px solid #3a506b;padding:13px;border-radius:11px}
+.action strong{display:block;font-size:14px}
+.action span{display:block;font-size:12px;color:#c0cfe2;font-weight:400;margin-top:5px}
+.action em{display:block;font-size:11px;color:#ffd27a;font-style:normal;margin-top:6px}
+.navrow{display:flex;gap:6px;overflow-x:auto;padding:4px 0 10px}
+.navrow button{white-space:nowrap;flex:0 0 auto}
+.navrow button.active{background:var(--blue);color:#071426}
+.event{border-color:#755d36;background:linear-gradient(145deg,#2a2419,#171e2a)}
+.event-tag{display:inline-block;border-radius:6px;padding:3px 7px;background:#4a3920;color:#ffdc98;font-size:10px;font-weight:800;letter-spacing:.5px;margin-bottom:7px}
+.log{padding:10px 0;border-bottom:1px solid #27384d;font-size:12px;color:#c3d2e5}
+.log:last-child{border-bottom:0}
+.log strong{color:white}
+.bar{height:7px;background:#27384c;border-radius:20px;overflow:hidden;margin-top:7px}
+.bar i{display:block;height:100%;background:var(--green);border-radius:20px}
+footer{max-width:1100px;margin:20px auto;padding:0 14px 24px;color:#7f91a8;font-size:11px}
+@media(min-width:620px){
+.grid,.country-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+.stats{grid-template-columns:repeat(3,minmax(0,1fr))}
+.dashboard-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+main{padding:22px}
+}
 </style>
 </head>
 <body>
+
 <header>
-<h1>🌐 WORLD POWER ONLINE</h1>
-<button class="secondary" id="languageBtn">हिन्दी</button>
+ <div class="brand">🌐 WORLD POWER ONLINE
+  <small>COUNTRY STRATEGY SIMULATOR</small>
+ </div>
+ <div>
+  <button class="secondary" id="languageBtn">हिन्दी</button>
+  <button class="danger hidden" id="logoutBtn">Log out</button>
+ </div>
 </header>
+
 <main>
-<p id="tagline">Build your nation. Shape the world.</p>
-<div class="notice" id="globalMessage">Create an account or log in to play.</div>
+ <p class="muted" id="tagline">Lead wisely. Every decision has consequences.</p>
+ <div class="notice" id="globalMessage">Sign in to start your country simulation.</div>
 
-<section class="panel" id="authPanel">
-<h2 id="authTitle">Player Registration / Login</h2>
-<label for="email">Email</label>
-<input id="email" type="email" autocomplete="email">
-<label for="password">Password</label>
-<input id="password" type="password" minlength="6" autocomplete="current-password">
-<button id="registerBtn">Create Account</button>
-<button class="secondary" id="loginBtn">Log In</button>
-<p id="authMessage" class="muted"></p>
-</section>
+ <section class="panel" id="authPanel">
+  <h2 id="authTitle">Player registration / login</h2>
+  <p class="muted">Use your account to continue your saved game.</p>
+  <label for="email">Email</label>
+  <input id="email" type="email" autocomplete="email" placeholder="you@example.com">
+  <label for="password">Password (at least 6 characters)</label>
+  <input id="password" type="password" minlength="6" autocomplete="current-password">
+  <button id="registerBtn">Create account</button>
+  <button class="secondary" id="loginBtn">Log in</button>
+  <p id="authMessage" class="muted"></p>
+ </section>
 
-<section class="hidden" id="gamePanel">
-<div class="panel">
-<p class="muted" id="userEmail"></p>
-<button class="danger" id="logoutBtn">Log Out</button>
-<h2 id="profileTitle">Your Player Profile</h2>
-<div class="grid" id="countries"></div>
-<label for="role" id="roleLabel">Preferred role</label>
-<select id="role">
-<option value="Citizen">Citizen</option>
-<option value="Applicant">Government applicant</option>
-<option value="Business">Business leader</option>
-<option value="Police">Police department</option>
-<option value="PublicService">Public service</option>
-</select>
-<label for="displayName" id="nameLabel">Player name</label>
-<input id="displayName" maxlength="24" placeholder="Game display name">
-<button id="saveBtn">Save Profile</button>
-<p id="profileMessage" class="muted"></p>
-<p id="profileSummary" class="muted"></p>
-</div>
+ <section id="setupPanel" class="panel hidden">
+  <h2>Set up your player</h2>
+  <p class="muted">Choose a country and role. Your role controls which decisions you can make.</p>
+  <h3>Choose your country</h3>
+  <div class="country-grid" id="countries"></div>
 
-<div class="panel">
-<h2>🌍 World Dashboard</h2>
-<p class="muted" id="countryWelcome">Manage your simulated nation.</p>
-<div class="dashboard-grid">
-<button class="dash-card" data-page="world"><strong>🌍 World</strong><span>National statistics</span></button>
-<button class="dash-card" data-page="government"><strong>🏛️ Government</strong><span>Policies and public trust</span></button>
-<button class="dash-card" data-page="military"><strong>🪖 Military</strong><span>Defence budget</span></button>
-<button class="dash-card" data-page="airforce"><strong>✈️ Air Force</strong><span>Air administration</span></button>
-<button class="dash-card" data-page="navy"><strong>⚓ Navy</strong><span>Naval administration</span></button>
-<button class="dash-card" data-page="business"><strong>💼 Business</strong><span>Economy overview</span></button>
-<button class="dash-card" data-page="servers"><strong>🌐 Servers</strong><span>Multiplayer status</span></button>
-<button class="dash-card" data-page="profile"><strong>👤 My Profile</strong><span>Player information</span></button>
-</div>
-</div>
+  <label for="role">Your role</label>
+  <select id="role">
+   <option value="Citizen">Citizen</option>
+   <option value="Applicant">Government applicant</option>
+   <option value="Business">Business leader</option>
+   <option value="Police">Police department official</option>
+   <option value="PublicService">Public service official</option>
+   <option value="Minister">Cabinet minister</option>
+   <option value="Military">Military commander</option>
+   <option value="PrimeMinister">Prime minister</option>
+   <option value="President">President</option>
+   <option value="AirForce">Air force commander</option>
+   <option value="Navy">Navy commander</option>
+  </select>
 
-<div class="panel" id="gameArea">
-<h2 id="pageTitle">📊 National Statistics</h2>
-<p class="muted" id="pageDescription">Your nation's current simulated status.</p>
-<div class="stats">
-<div class="stat"><small>National budget</small><strong id="budgetStat">1000</strong></div>
-<div class="stat"><small>Public trust</small><strong id="trustStat">60/100</strong></div>
-<div class="stat"><small>Reputation</small><strong id="reputationStat">50/100</strong></div>
-<div class="stat"><small>Hospital capacity</small><strong id="hospitalStat">60/100</strong></div>
-<div class="stat"><small>Education</small><strong id="educationStat">60/100</strong></div>
-<div class="stat"><small>Defence readiness</small><strong id="defenceStat">50/100</strong></div>
-</div>
-<div id="actionsArea"></div>
-<p id="gameMessage" class="muted"></p>
-</div>
-</section>
+  <label for="displayName">Player name</label>
+  <input id="displayName" maxlength="24" placeholder="Your game name">
+  <button id="saveProfileBtn">Save profile and start</button>
+  <p id="profileMessage" class="muted"></p>
+ </section>
 
-<p class="muted">World Power Online — free-tier prototype. Multiplayer is not yet connected.</p>
+ <section id="gamePanel" class="hidden">
+  <div class="panel">
+   <div class="topline">
+    <div>
+     <h2 id="welcomeTitle">National control room</h2>
+     <p class="muted" id="welcomeText"></p>
+    </div>
+    <div class="budget-pill" id="budgetPill">Treasury: 5,000 credits</div>
+   </div>
+   <div class="stats" id="mainStats"></div>
+   <p class="small">Game credits are simulated units, not real currency. Treasury is limited and monthly expenses matter.</p>
+  </div>
+
+  <div class="panel">
+   <h2>Command centre</h2>
+   <p class="muted">Choose a department. Available decisions depend on your role and treasury.</p>
+   <div class="dashboard-grid" id="dashboardCards"></div>
+  </div>
+
+  <div class="panel hidden" id="pagePanel">
+   <div class="topline">
+    <div>
+     <h2 id="pageTitle">Department</h2>
+     <p class="muted" id="pageDescription"></p>
+    </div>
+    <button class="secondary" id="backBtn">← Dashboard</button>
+   </div>
+   <div class="navrow" id="pageNav"></div>
+   <div id="pageContent"></div>
+  </div>
+
+  <div class="panel" id="eventPanel">
+   <div class="topline">
+    <div>
+     <h2>📰 National events</h2>
+     <p class="muted">Fictional, real-life-inspired scenarios—not live news reports.</p>
+    </div>
+    <span class="event-tag" id="turnTag">TURN 1</span>
+   </div>
+   <div id="eventContent"></div>
+  </div>
+
+  <div class="panel">
+   <h2>📜 Decision history</h2>
+   <p class="muted">Review how previous choices affected the country.</p>
+   <div id="history"></div>
+  </div>
+
+  <div class="panel">
+   <h2>Next turn</h2>
+   <p class="muted" id="turnDescription">Advance one month to collect revenue, pay routine expenses and possibly face a new event.</p>
+   <button class="green" id="nextTurnBtn">Advance month</button>
+   <p id="gameMessage" class="muted"></p>
+  </div>
+ </section>
 </main>
+
+<footer>
+ World Power Online • Free-tier single-player simulation prototype.
+ Shared live multiplayer and live news feeds are not connected yet.
+</footer>
 
 <script type="module">
 import {initializeApp}
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
 import {
  getAuth,createUserWithEmailAndPassword,
  signInWithEmailAndPassword,onAuthStateChanged,signOut
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
 import {
  getFirestore,doc,getDoc,setDoc,serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-/* Keep the Firebase values from your existing project. */
 const firebaseConfig={
  apiKey:"AIzaSyBGJYjRaaKRKiywUW6c38zo_yBEQKQy09s",
  authDomain:"world-power-online.firebaseapp.com",
@@ -135,260 +211,1392 @@ const firebaseConfig={
 };
 
 const $=id=>document.getElementById(id);
-const countries=[
- ["🇮🇳","India","भारत"],["🇺🇸","America","अमेरिका"],
- ["🇷🇺","Russia","रूस"],["🇨🇳","China","चीन"],
- ["🇰🇵","North Korea","उत्तर कोरिया"],["🇮🇱","Israel","इज़राइल"],
- ["🇮🇷","Iran","ईरान"],["🇯🇵","Japan","जापान"],
- ["🇵🇰","Pakistan","पाकिस्तान"],["🇬🇧","United Kingdom","ब्रिटेन"]
-];
-const roles=["Citizen","Applicant","Business","Police","PublicService"];
-let lang="en",selectedCountry="",auth=null,db=null,userNow=null;
-let profile=null,game=null,currentPage="world",busy=false;
 
-const initialGame=()=>({
- budget:1000,trust:60,reputation:50,hospital:60,
- education:60,defence:50,turn:1,lastAction:"Game started"
+const countryData=[
+ ["🇮🇳","India","भारत"],
+ ["🇺🇸","America","अमेरिका"],
+ ["🇷🇺","Russia","रूस"],
+ ["🇨🇳","China","चीन"],
+ ["🇰🇵","North Korea","उत्तर कोरिया"],
+ ["🇮🇱","Israel","इज़राइल"],
+ ["🇮🇷","Iran","ईरान"],
+ ["🇯🇵","Japan","जापान"],
+ ["🇵🇰","Pakistan","पाकिस्तान"],
+ ["🇬🇧","United Kingdom","ब्रिटेन"]
+];
+
+const roleLabels={
+ Citizen:["Citizen","नागरिक"],
+ Applicant:["Government applicant","सरकारी पद का आवेदनकर्ता"],
+ Business:["Business leader","व्यवसाय प्रमुख"],
+ Police:["Police department official","पुलिस विभाग अधिकारी"],
+ PublicService:["Public service official","जनसेवा अधिकारी"],
+ Minister:["Cabinet minister","कैबिनेट मंत्री"],
+ Military:["Military commander","सेना कमांडर"],
+ PrimeMinister:["Prime minister","प्रधानमंत्री"],
+ President:["President","राष्ट्रपति"],
+ AirForce:["Air force commander","वायुसेना कमांडर"],
+ Navy:["Navy commander","नौसेना कमांडर"]
+};
+
+let lang="en";
+let selectedCountry="";
+let auth,db,userNow=null,profile=null,state=null;
+let busy=false,currentPage="world",firebaseReady=false;
+
+const tr=(en,hi)=>lang==="en"?en:hi;
+const num=v=>Number.isFinite(Number(v))?Number(v):0;
+const clamp=n=>Math.max(0,Math.min(100,Math.round(num(n))));
+const fmt=n=>Math.round(num(n)).toLocaleString("en-IN");
+
+const initialState=()=>({
+ version:2,
+ turn:1,
+ budget:5000,
+ trust:60,
+ reputation:50,
+ economy:55,
+ healthcare:55,
+ education:55,
+ security:55,
+ defence:50,
+ environment:55,
+ publicAnger:25,
+ unemployment:35,
+ corruption:25,
+ futureIncome:0,
+ futureExpense:0,
+ taxRate:1,
+ currentEvent:null,
+ history:[{
+  turn:1,
+  title:"Government formed",
+  detail:"Starting treasury: 5,000 credits. Monthly budget constraints are active."
+ }]
 });
-const clamp=n=>Math.max(0,Math.min(100,n));
-const fmt=n=>Math.round(n).toLocaleString("en-IN");
-function msg(id,text,error=false){
- $(id).textContent=text;
- $(id).className=error?"muted error":"muted";
+
+function normalizeState(raw){
+ const base=initialState();
+ const s={...base,...(raw&&typeof raw==="object"?raw:{})};
+ const keys=[
+  "turn","budget","trust","reputation","economy","healthcare",
+  "education","security","defence","environment","publicAnger",
+  "unemployment","corruption","futureIncome","futureExpense",
+  "taxRate","eventIndex"
+ ];
+ keys.forEach(k=>{s[k]=num(s[k]);});
+ s.turn=Math.max(1,Math.floor(s.turn));
+ s.budget=Math.max(0,s.budget);
+ [
+  "trust","reputation","economy","healthcare","education","security",
+  "defence","environment","publicAnger","unemployment","corruption"
+ ].forEach(k=>s[k]=clamp(s[k]));
+ s.taxRate=Math.max(0,Math.min(2,s.taxRate));
+ s.history=Array.isArray(s.history)?s.history.slice(0,40):[];
+ s.currentEvent=s.currentEvent&&typeof s.currentEvent==="object"?s.currentEvent:null;
+ return s;
 }
-function say(text,error=false){msg("gameMessage",text,error)}
-function tr(en,hi){return lang==="en"?en:hi}
+
+function showMessage(id,text,error=false){
+ const el=$(id);
+ el.textContent=text;
+ el.className=error?"muted error":"muted";
+}
+
+function logEntry(title,detail){
+ state.history.unshift({turn:state.turn,title,detail});
+ state.history=state.history.slice(0,30);
+}
+
+function currentCountryName(){
+ const c=countryData.find(x=>x[1]===profile?.country);
+ return c?(lang==="en"?c[1]:c[2]):(profile?.country||"");
+}
+
+function roleName(role=profile?.role){
+ const r=roleLabels[role]||roleLabels.Citizen;
+ return r[lang==="en"?0:1];
+}
 
 function renderCountries(){
- const root=$("countries");root.replaceChildren();
- countries.forEach(([flag,en,hi])=>{
+ const root=$("countries");
+ root.replaceChildren();
+
+ countryData.forEach(([flag,en,hi])=>{
   const b=document.createElement("button");
   b.className="country"+(selectedCountry===en?" active":"");
   b.textContent=flag+" "+(lang==="en"?en:hi);
-  b.onclick=()=>{selectedCountry=en;renderCountries()};
+  b.onclick=()=>{
+   selectedCountry=en;
+   renderCountries();
+  };
   root.appendChild(b);
  });
 }
-function renderRoles(){
- const select=$("role"),old=select.value;
- select.replaceChildren();
- const names=lang==="en"
-  ?["Citizen","Government applicant","Business leader","Police department","Public service"]
-  :["नागरिक","सरकारी पद का आवेदनकर्ता","व्यवसायी","पुलिस विभाग","जनसेवा"];
- roles.forEach((r,i)=>{
-  const o=document.createElement("option");
-  o.value=r;o.textContent=names[i];select.appendChild(o);
- });
- select.value=roles.includes(old)?old:"Citizen";
-}
+
 function applyLanguage(){
  $("languageBtn").textContent=lang==="en"?"हिन्दी":"English";
- $("tagline").textContent=tr("Build your nation. Shape the world.","अपने देश का निर्माण करो। दुनिया को आकार दो।");
- $("authTitle").textContent=tr("Player Registration / Login","खिलाड़ी रजिस्ट्रेशन / लॉगिन");
- $("profileTitle").textContent=tr("Your Player Profile","तुम्हारी खिलाड़ी प्रोफाइल");
- $("roleLabel").textContent=tr("Preferred role","अपनी भूमिका");
- $("nameLabel").textContent=tr("Player name","खिलाड़ी का नाम");
- $("saveBtn").textContent=tr("Save Profile","प्रोफाइल सेव करो");
- renderCountries();renderRoles();
- if(game)renderGame();
- if(profile)showProfile();
-}
-$("languageBtn").onclick=()=>{lang=lang==="en"?"hi":"en";applyLanguage()};
-
-function showProfile(){
- if(!profile)return;
- const country=countries.find(c=>c[1]===profile.country);
- const countryName=country?(lang==="en"?country[1]:country[2]):profile.country;
- const roleIndex=roles.indexOf(profile.role);
- const roleNames=lang==="en"
-  ?["Citizen","Government applicant","Business leader","Police department","Public service"]
-  :["नागरिक","सरकारी पद का आवेदनकर्ता","व्यवसायी","पुलिस विभाग","जनसेवा"];
- $("profileSummary").textContent=
-  tr("Player: ","खिलाड़ी: ")+(profile.name||"")+" | "+
-  tr("Country: ","देश: ")+(countryName||"")+" | "+
-  tr("Role: ","भूमिका: ")+(roleNames[Math.max(0,roleIndex)]||"Citizen");
- $("countryWelcome").textContent=
-  tr("You manage: ","तुम्हारा देश: ")+(countryName||"");
+ $("tagline").textContent=tr(
+  "Lead wisely. Every decision has consequences.",
+  "समझदारी से शासन करो। हर फैसले का असर होगा।"
+ );
+ $("registerBtn").textContent=tr("Create account","अकाउंट बनाएँ");
+ $("loginBtn").textContent=tr("Log in","लॉगिन");
+ $("logoutBtn").textContent=tr("Log out","लॉगआउट");
+ $("saveProfileBtn").textContent=tr("Save profile and start","प्रोफाइल सेव करके शुरू करें");
+ $("backBtn").textContent=tr("← Dashboard","← डैशबोर्ड");
+ $("nextTurnBtn").textContent=tr("Advance month","अगले महीने जाएँ");
+ renderCountries();
+ renderDashboard();
+ if(state)renderAll();
 }
 
-function renderGame(){
- if(!game)return;
- ["budget","trust","reputation","hospital","education","defence"].forEach(k=>{
-  const el=$(k+"Stat");if(el)el.textContent=fmt(game[k])+(["trust","reputation","hospital","education","defence"].includes(k)?"/100":"");
- });
- const pages={
-  world:[tr("🌍 National Statistics","🌍 राष्ट्रीय आँकड़े"),tr("Review the current state of your simulated nation.","अपने देश की मौजूदा स्थिति देखो।")],
-  government:[tr("🏛️ Government & Policies","🏛️ सरकार और नीतियाँ"),tr("Choose a policy. Each choice costs budget and changes national statistics.","नीति चुनो। हर फैसले से बजट और देश के आँकड़े बदलेंगे।")],
-  military:[tr("🪖 Defence Administration","🪖 रक्षा प्रशासन"),tr("Manage simulated defence readiness and spending.","गेम में रक्षा बजट और तैयारी संभालो।")],
-  airforce:[tr("✈️ Air Force","✈️ वायुसेना"),tr("Air administration preview. Detailed units will be added later.","वायुसेना का शुरुआती पेज। विस्तृत सिस्टम बाद में जुड़ेगा।")],
-  navy:[tr("⚓ Navy","⚓ नौसेना"),tr("Naval administration preview. Detailed units will be added later.","नौसेना का शुरुआती पेज। विस्तृत सिस्टम बाद में जुड़ेगा।")],
-  business:[tr("💼 Business & Economy","💼 व्यापार और अर्थव्यवस्था"),tr("Manage your simulated economy through policies.","नीतियों से गेम की अर्थव्यवस्था संभालो।")],
-  servers:[tr("🌐 Multiplayer Servers","🌐 मल्टीप्लेयर सर्वर"),tr("This prototype saves your own state. Shared live multiplayer is not connected yet.","यह prototype तुम्हारा डेटा सेव करता है। असली live multiplayer अभी जुड़ा नहीं है।")],
-  profile:[tr("👤 My Profile","👤 मेरी प्रोफाइल"),tr("Your account and saved player profile.","तुम्हारा account और सेव की गई प्रोफाइल।")]
- };
- $("pageTitle").textContent=pages[currentPage][0];
- $("pageDescription").textContent=pages[currentPage][1];
- const area=$("actionsArea");area.replaceChildren();
- const stat=$("gameArea").querySelector(".stats");
- stat.classList.toggle("hidden",currentPage==="servers"||currentPage==="profile");
- const addAction=(title,description,cost,changes)=>{
-  const b=document.createElement("button");b.className="action";
-  const strong=document.createElement("strong");strong.textContent=title;
+$("languageBtn").onclick=()=>{
+ lang=lang==="en"?"hi":"en";
+ applyLanguage();
+};
+
+function canAny(...roles){
+ return roles.includes(profile?.role);
+}
+function canGovern(){
+ return canAny("Minister","PrimeMinister","President");
+}
+function canSecurity(){
+ return canAny("Police","Minister","PrimeMinister","President");
+}
+function canDefence(){
+ return canAny("Military","Minister","PrimeMinister","President");
+}
+function canAir(){
+ return canAny("AirForce","Military","Minister","PrimeMinister","President");
+}
+function canNavy(){
+ return canAny("Navy","Military","Minister","PrimeMinister","President");
+}
+
+const pages=[
+ {id:"world",icon:"🌍",en:"National overview",hi:"राष्ट्रीय स्थिति",
+  desc:["National indicators and current pressures.","राष्ट्रीय संकेतक और मौजूदा चुनौतियाँ।"]},
+ {id:"government",icon:"🏛️",en:"Government",hi:"सरकार",
+  desc:["Policies, protests, public trust and accountability.","नीतियाँ, विरोध, जनविश्वास और जवाबदेही।"]},
+ {id:"economy",icon:"💼",en:"Economy & business",hi:"अर्थव्यवस्था और व्यापार",
+  desc:["Revenue, employment, business and cost of living.","राजस्व, रोजगार, व्यापार और महँगाई।"]},
+ {id:"health",icon:"🏥",en:"Health & education",hi:"स्वास्थ्य और शिक्षा",
+  desc:["Public services, hospitals and schools.","जनसेवा, अस्पताल और स्कूल।"]},
+ {id:"police",icon:"🚓",en:"Police & public order",hi:"पुलिस और कानून-व्यवस्था",
+  desc:["Public order, accountability and peaceful protest response.","कानून-व्यवस्था, जवाबदेही और शांतिपूर्ण विरोध का जवाब।"]},
+ {id:"defence",icon:"🪖",en:"Defence",hi:"रक्षा",
+  desc:["Defence readiness and sustainable spending.","रक्षा तैयारी और संतुलित खर्च।"]},
+ {id:"airforce",icon:"✈️",en:"Air force",hi:"वायुसेना",
+  desc:["Air-service readiness and maintenance.","वायुसेवा की तैयारी और रखरखाव।"]},
+ {id:"navy",icon:"⚓",en:"Navy",hi:"नौसेना",
+  desc:["Naval readiness and maritime safety.","नौसैनिक तैयारी और समुद्री सुरक्षा।"]},
+ {id:"profile",icon:"👤",en:"My profile",hi:"मेरी प्रोफाइल",
+  desc:["Account, role and save status.","अकाउंट, भूमिका और सेव स्थिति।"]}
+];
+
+function renderDashboard(){
+ const root=$("dashboardCards");
+ if(!root)return;
+ root.replaceChildren();
+
+ pages.forEach(p=>{
+  const b=document.createElement("button");
+  b.className="dash-card";
+  const strong=document.createElement("strong");
+  strong.textContent=p.icon+" "+(lang==="en"?p.en:p.hi);
   const span=document.createElement("span");
-  span.textContent=description+" | "+tr("Cost: ","खर्च: ")+cost;
+  span.textContent=p.desc[lang==="en"?0:1];
   b.append(strong,span);
-  b.disabled=busy||game.budget<cost;
-  b.onclick=()=>takeAction(title,cost,changes);
-  area.appendChild(b);
- };
- if(currentPage==="government"){
-  addAction(tr("Balanced healthcare programme","संतुलित स्वास्थ्य योजना"),tr("Improves hospital capacity and trust","अस्पताल क्षमता और भरोसा बढ़ाता है"),120,{hospital:8,trust:5,reputation:3});
-  addAction(tr("Education investment","शिक्षा में निवेश"),tr("Improves education and public trust","शिक्षा और जनविश्वास बढ़ाता है"),100,{education:8,trust:3,reputation:2});
-  addAction(tr("Public communication campaign","जनसंचार अभियान"),tr("Improves trust and reputation","भरोसा और प्रतिष्ठा बढ़ाता है"),60,{trust:5,reputation:4});
- }else if(currentPage==="military"){
-  addAction(tr("Defence training programme","रक्षा प्रशिक्षण कार्यक्रम"),tr("Improves simulated readiness","गेम में तैयारी बढ़ाता है"),100,{defence:8,reputation:1});
-  addAction(tr("Defence maintenance","रक्षा रखरखाव"),tr("Maintains defence readiness","रक्षा तैयारी बनाए रखता है"),70,{defence:4,trust:-1});
- }else if(currentPage==="business"){
-  addAction(tr("Small business support","छोटे व्यवसायों को सहायता"),tr("Costs money now; improves trust and reputation","अभी खर्च, भरोसा और प्रतिष्ठा बढ़ती है"),80,{trust:3,reputation:3});
-  addAction(tr("Economic development plan","आर्थिक विकास योजना"),tr("Costs money now; brings simulated future income","अभी खर्च, अगले turn में गेम की आय बढ़ेगी"),150,{trust:2,reputation:2,futureIncome:100});
- }else if(currentPage==="airforce"||currentPage==="navy"){
-  const label=currentPage==="airforce"?tr("Air force maintenance","वायुसेना रखरखाव"):tr("Naval maintenance","नौसेना रखरखाव");
-  addAction(label,tr("A basic simulated administration action","शुरुआती गेम कार्रवाई"),50,{defence:2,reputation:1});
- }else if(currentPage==="world"){
-  addAction(tr("Collect simulated tax revenue","गेम का कर राजस्व जमा करो"),0,{},{});
+  b.onclick=()=>openPage(p.id);
+  root.appendChild(b);
+ });
+}
+
+function openPage(id){
+ currentPage=id;
+ $("pagePanel").classList.remove("hidden");
+ renderPage();
+ $("pagePanel").scrollIntoView({behavior:"smooth",block:"start"});
+}
+
+$("backBtn").onclick=()=>{
+ $("pagePanel").classList.add("hidden");
+ $("gamePanel").scrollIntoView({behavior:"smooth",block:"start"});
+};
+
+function makeAction(title,desc,cost,changes,allowed=true,extra={}){
+ const b=document.createElement("button");
+ b.className="action";
+
+ const s=document.createElement("strong");
+ s.textContent=title;
+
+ const d=document.createElement("span");
+ d.textContent=desc;
+
+ const em=document.createElement("em");
+ em.textContent=tr("Cost: ","खर्च: ")+fmt(cost)+" credits"+
+  (extra.risk?" • "+tr("Trade-off: ","जोखिम: ")+extra.risk:"");
+
+ b.append(s,d,em);
+ b.disabled=busy||!allowed||state.budget<cost;
+
+ if(!allowed){
+  em.textContent=tr(
+   "This decision requires a different role.",
+   "इस फैसले के लिए दूसरी भूमिका चाहिए।"
+  );
  }
+
+ b.onclick=()=>applyDecision(title,desc,cost,changes);
+ return b;
+}
+
+function sectionTitle(title,desc){
+ const h=document.createElement("h3");
+ h.textContent=title;
+ const p=document.createElement("p");
+ p.className="muted";
+ p.textContent=desc;
+ return [h,p];
+}
+
+function renderPage(){
+ if(!state||!profile)return;
+
+ const p=pages.find(x=>x.id===currentPage)||pages[0];
+ $("pageTitle").textContent=p.icon+" "+(lang==="en"?p.en:p.hi);
+ $("pageDescription").textContent=p.desc[lang==="en"?0:1];
+
+ const nav=$("pageNav");
+ nav.replaceChildren();
+
+ pages.forEach(x=>{
+  const b=document.createElement("button");
+  b.className=x.id===currentPage?"active":"secondary";
+  b.textContent=x.icon+" "+(lang==="en"?x.en:x.hi);
+  b.onclick=()=>{
+   currentPage=x.id;
+   renderPage();
+  };
+  nav.appendChild(b);
+ });
+
+ const root=$("pageContent");
+ root.replaceChildren();
+
+ const add=(...args)=>root.appendChild(makeAction(...args));
+
  if(currentPage==="world"){
-  const b=document.createElement("button");b.className="action";
-  b.innerHTML="<strong>"+tr("Advance to next turn","अगले टर्न पर जाओ")+"</strong><span>"+tr("Collect 100 budget; progress one turn","100 बजट जोड़ो; एक टर्न आगे बढ़ो")+"</span>";
-  b.disabled=busy;b.onclick=nextTurn;area.appendChild(b);
- }
- if(currentPage==="profile"){
-  const p=document.createElement("p");p.className="muted";
-  p.textContent=$("profileSummary").textContent;area.appendChild(p);
- }
- if(currentPage==="servers"){
-  const p=document.createElement("p");p.className="muted";
-  p.textContent=tr("Live server matching, chat and shared country state still need a secure multiplayer backend.","लाइव सर्वर मैचिंग, चैट और साझा देश के लिए आगे सुरक्षित multiplayer backend जोड़ना होगा।");
-  area.appendChild(p);
+  const [h,p0]=sectionTitle(
+   tr("Country indicators","देश के संकेतक"),
+   tr(
+    "A strong country needs balanced services, trust, stable finances and accountable institutions.",
+    "मजबूत देश के लिए सेवाएँ, भरोसा, स्थिर बजट और जवाबदेह संस्थाएँ जरूरी हैं।"
+   )
+  );
+  root.append(h,p0);
+  root.appendChild(buildIndicatorList());
+  if(state.currentEvent)root.appendChild(buildEventCard());
+
+ }else if(currentPage==="government"){
+  root.append(...sectionTitle(
+   tr("Government decisions","सरकारी फैसले"),
+   tr(
+    "Only cabinet-level or national leadership roles can approve national policy.",
+    "राष्ट्रीय नीतियाँ केवल कैबिनेट या राष्ट्रीय नेतृत्व वाली भूमिकाएँ मंजूर कर सकती हैं।"
+   )
+  ));
+
+  add(
+   tr("Balanced hospital, testing and public communication funding","अस्पताल, जाँच और जनसंचार के लिए संतुलित फंडिंग"),
+   tr("Health improves; trust rises; treasury falls and other projects may need to wait.","स्वास्थ्य और भरोसा बढ़ता है; बजट घटता है और दूसरे काम टल सकते हैं।"),
+   650,{healthcare:10,trust:6,publicAnger:-5,reputation:3,economy:1},
+   canGovern(),{risk:tr("high upfront cost","शुरुआती खर्च अधिक")}
+  );
+
+  add(
+   tr("Independent corruption investigation","भ्रष्टाचार की स्वतंत्र जाँच"),
+   tr("May improve trust and accountability; officials may resist and the process costs money.","भरोसा और जवाबदेही बढ़ सकती है; विरोध और खर्च संभव है।"),
+   300,{corruption:-12,trust:5,reputation:5,publicAnger:-4,economy:-1},
+   canGovern(),{risk:tr("short-term administrative slowdown","कुछ समय प्रशासन धीमा")}
+  );
+
+  add(
+   tr("Cut non-essential government spending","गैर-जरूरी सरकारी खर्च घटाओ"),
+   tr("Saves treasury pressure, but service quality and trust can suffer if cuts go too far.","बजट पर दबाव घटेगा, लेकिन ज्यादा कटौती से सेवाएँ और भरोसा गिर सकते हैं।"),
+   0,{budget:450,trust:-4,publicAnger:4,education:-2,healthcare:-2,reputation:-1},
+   canGovern(),{risk:tr("service quality may fall","सेवाओं की गुणवत्ता गिर सकती है")}
+  );
+
+  add(
+   tr("Public consultation and transparent briefing","जन-सुनवाई और पारदर्शी जानकारी"),
+   tr("Costs money and time, but can lower anger and misinformation.","खर्च और समय लगेगा, लेकिन गुस्सा और गलतफहमी घट सकती है।"),
+   120,{trust:7,publicAnger:-8,reputation:3},
+   canGovern(),{risk:tr("slower decision-making","फैसले में देरी")}
+  );
+
+  add(
+   tr("Resign / request resignation after a serious failure","गंभीर विफलता पर इस्तीफा / इस्तीफे की माँग"),
+   tr("May restore accountability, but creates a short-term leadership disruption.","जवाबदेही बहाल हो सकती है, लेकिन नेतृत्व में अस्थायी अस्थिरता आएगी।"),
+   80,{trust:5,reputation:4,publicAnger:-4,economy:-2},
+   canGovern(),{risk:tr("short-term disruption","अस्थायी अस्थिरता")}
+  );
+
+ }else if(currentPage==="economy"){
+  root.append(...sectionTitle(
+   tr("Economy and public finances","अर्थव्यवस्था और सरकारी वित्त"),
+   tr(
+    "Tax changes affect revenue, household pressure, business activity and public trust together.",
+    "कर बदलाव राजस्व, परिवारों पर दबाव, व्यापार और जनविश्वास सभी को प्रभावित करते हैं।"
+   )
+  ));
+
+  add(
+   tr("Small-business grants and credit access","छोटे व्यवसायों को सहायता और ऋण"),
+   tr("Supports jobs and business activity; uses treasury funds.","रोजगार और व्यापार को सहारा; सरकारी बजट खर्च होगा।"),
+   400,{economy:7,unemployment:-5,trust:2,publicAnger:-2,futureIncome:100},
+   canGovern()||canAny("Business"),{risk:tr("benefit takes time","फायदा आने में समय")}
+  );
+
+  add(
+   tr("Skills and jobs programme","कौशल और रोजगार कार्यक्रम"),
+   tr("Reduces unemployment over time and improves household confidence.","समय के साथ बेरोजगारी घटेगी और परिवारों का भरोसा बढ़ेगा।"),
+   500,{education:3,economy:5,unemployment:-7,trust:4,publicAnger:-3,futureIncome:80},
+   canGovern()||canAny("Business"),{risk:tr("training results are gradual","प्रशिक्षण का असर धीरे")}
+  );
+
+  add(
+   tr("Temporary tax relief for households","परिवारों को अस्थायी कर राहत"),
+   tr("Reduces public pressure now but lowers next-turn revenue.","जनता पर दबाव घटेगा, लेकिन अगले टर्न का राजस्व कम होगा।"),
+   250,{trust:5,publicAnger:-5,economy:1,taxRate:-0.25},
+   canGovern(),{risk:tr("less public revenue","सरकारी आय कम")}
+  );
+
+  add(
+   tr("Increase tax rate","कर दर बढ़ाओ"),
+   tr("Raises future revenue but increases cost-of-living pressure and protest risk.","भविष्य का राजस्व बढ़ेगा, लेकिन महँगाई का दबाव और विरोध का जोखिम बढ़ेगा।"),
+   0,{budget:250,trust:-5,publicAnger:8,economy:-2,unemployment:2,taxRate:0.25},
+   canGovern(),{risk:tr("public backlash","जनता की नाराजगी")}
+  );
+
+  add(
+   tr("Infrastructure maintenance","बुनियादी ढाँचे का रखरखाव"),
+   tr("Improves economic productivity and public services.","उत्पादकता और जनसेवाएँ बेहतर होंगी।"),
+   350,{economy:5,trust:2,unemployment:-2,environment:-1},
+   canGovern(),{risk:tr("construction disruption","काम के दौरान असुविधा")}
+  );
+
+ }else if(currentPage==="health"){
+  root.append(...sectionTitle(
+   tr("Health and education services","स्वास्थ्य और शिक्षा सेवाएँ"),
+   tr(
+    "Neglect creates future costs; well-funded services improve resilience and trust.",
+    "लापरवाही से भविष्य में खर्च बढ़ता है; अच्छी सेवाएँ भरोसा और तैयारी बढ़ाती हैं।"
+   )
+  ));
+
+  add(
+   tr("Expand hospital capacity","अस्पताल क्षमता बढ़ाओ"),
+   tr("Improves healthcare and trust; consumes funds.","स्वास्थ्य और भरोसा बढ़ेंगे; बजट खर्च होगा।"),
+   450,{healthcare:9,trust:3,publicAnger:-3,reputation:2},
+   canGovern()||canAny("PublicService"),{risk:tr("maintenance costs continue","आगे रखरखाव खर्च")}
+  );
+
+  add(
+   tr("School repair and teacher support","स्कूल सुधार और शिक्षक सहायता"),
+   tr("Improves education and long-term productivity.","शिक्षा और दीर्घकालीन उत्पादकता बेहतर होगी।"),
+   400,{education:9,economy:2,trust:3,unemployment:-1},
+   canGovern()||canAny("PublicService"),{risk:tr("benefit is gradual","फायदा धीरे मिलेगा")}
+  );
+
+  add(
+   tr("Emergency disease monitoring","बीमारी की निगरानी और जाँच"),
+   tr("Improves health readiness and lowers event risk.","स्वास्थ्य तैयारी बेहतर होगी और संकट का जोखिम घटेगा।"),
+   250,{healthcare:4,trust:2,reputation:2},
+   canGovern()||canAny("PublicService"),{risk:tr("requires sustained funding","लगातार फंडिंग चाहिए")}
+  );
+
+ }else if(currentPage==="police"){
+  root.append(...sectionTitle(
+   tr("Public order and protest response","कानून-व्यवस्था और विरोध का जवाब"),
+   tr(
+    "Prioritise lawful, proportionate and peaceful responses. Heavy-handed actions can worsen trust and unrest.",
+    "कानूनी, उचित और शांतिपूर्ण तरीके प्राथमिकता हों। अत्यधिक सख्ती भरोसा और अशांति बिगाड़ सकती है।"
+   )
+  ));
+
+  add(
+   tr("Dialogue, public hearing and independent review","बातचीत, जन-सुनवाई और स्वतंत्र समीक्षा"),
+   tr("Costs staff time; can reduce anger and build trust.","समय और संसाधन लगेंगे; गुस्सा घट सकता है और भरोसा बढ़ेगा।"),
+   100,{trust:7,publicAnger:-12,reputation:3,security:1},
+   canSecurity(),{risk:tr("takes time","समय लगेगा")}
+  );
+
+  add(
+   tr("Targeted lawful crowd-safety operation","कानूनी और सीमित भीड़-सुरक्षा कार्रवाई"),
+   tr("May restore access to public spaces, but complaints and trust costs are possible.","सार्वजनिक रास्ते खुल सकते हैं, लेकिन शिकायतें और भरोसे का नुकसान संभव है।"),
+   180,{security:5,trust:-5,publicAnger:4,reputation:-2},
+   canSecurity(),{risk:tr("rights complaints and escalation","अधिकारों की शिकायत और तनाव बढ़ना")}
+  );
+
+  add(
+   tr("Independent complaint investigation","स्वतंत्र शिकायत जाँच"),
+   tr("Improves accountability; takes time and can expose institutional failures.","जवाबदेही बढ़ती है; समय लगता है और संस्थागत कमियाँ सामने आ सकती हैं।"),
+   160,{corruption:-6,trust:5,reputation:3,publicAnger:-4},
+   canSecurity(),{risk:tr("short-term criticism","अल्पकालीन आलोचना")}
+  );
+
+  add(
+   tr("Ignore protest demands","प्रदर्शन की माँगों को अनदेखा करो"),
+   tr("No immediate cost, but anger and instability may grow.","तुरंत खर्च नहीं, लेकिन गुस्सा और अस्थिरता बढ़ सकती है।"),
+   0,{trust:-7,publicAnger:10,reputation:-3,security:-2},
+   canSecurity(),{risk:tr("higher future unrest risk","आगे अशांति का अधिक जोखिम")}
+  );
+
+  add(
+   tr("Request resignation / resign from office","इस्तीफा माँगो / पद से इस्तीफा दो"),
+   tr("Can show accountability; creates temporary disruption.","जवाबदेही दिख सकती है; अस्थायी व्यवधान होगा।"),
+   50,{trust:4,reputation:5,publicAnger:-5,economy:-1},
+   canGovern(),{risk:tr("temporary leadership gap","अस्थायी नेतृत्व की कमी")}
+  );
+
+ }else if(currentPage==="defence"){
+  root.append(...sectionTitle(
+   tr("Defence administration","रक्षा प्रशासन"),
+   tr(
+    "Readiness costs money; overspending can crowd out health, education and jobs.",
+    "तैयारी पर खर्च जरूरी है; बहुत खर्च से स्वास्थ्य, शिक्षा और रोजगार के लिए पैसा कम हो सकता है।"
+   )
+  ));
+
+  add(
+   tr("Training and readiness programme","प्रशिक्षण और तैयारी कार्यक्रम"),
+   tr("Improves readiness but adds operating costs next month.","तैयारी बढ़ेगी, लेकिन अगले महीने संचालन खर्च बढ़ेगा।"),
+   450,{defence:8,security:2,futureExpense:60},
+   canDefence(),{risk:tr("higher recurring costs","लगातार खर्च बढ़ेगा")}
+  );
+
+  add(
+   tr("Maintenance and safety audit","रखरखाव और सुरक्षा ऑडिट"),
+   tr("Improves reliability and accountability.","विश्वसनीयता और जवाबदेही बढ़ेगी।"),
+   250,{defence:4,corruption:-2,reputation:2},
+   canDefence(),{risk:tr("less visible immediate benefit","तुरंत बड़ा फायदा नहीं दिखेगा")}
+  );
+
+  add(
+   tr("Reduce non-essential defence costs","गैर-जरूरी रक्षा खर्च घटाओ"),
+   tr("Frees some funds but can reduce readiness.","कुछ बजट बचेगा, लेकिन तैयारी घट सकती है।"),
+   0,{budget:300,defence:-5,security:-2,trust:1},
+   canGovern()||canAny("Military"),{risk:tr("readiness falls","तैयारी घटेगी")}
+  );
+
+ }else if(currentPage==="airforce"||currentPage==="navy"){
+  const isAir=currentPage==="airforce";
+  const allowed=isAir?canAir():canNavy();
+  const dept=isAir?"Air force":"Navy";
+  const hi=isAir?"वायुसेना":"नौसेना";
+
+  root.append(...sectionTitle(
+   tr(dept+" administration",hi+" प्रशासन"),
+   tr(
+    "This is a strategic readiness simulation, not operational military guidance.",
+    "यह रणनीतिक तैयारी का सिमुलेशन है, वास्तविक सैन्य संचालन की गाइड नहीं।"
+   )
+  ));
+
+  add(
+   tr("Maintenance and personnel training","रखरखाव और कर्मियों का प्रशिक्षण"),
+   tr("Improves service readiness; consumes treasury funds.","तैयारी बेहतर; बजट खर्च होगा।"),
+   300,{defence:4,security:1,reputation:1},
+   allowed,{risk:tr("ongoing upkeep","नियमित रखरखाव")}
+  );
+
+  add(
+   tr("Safety, logistics and emergency readiness","सुरक्षा, रसद और आपात तैयारी"),
+   tr("Improves resilience and public confidence.","आपात तैयारी और जनता का भरोसा बढ़ेगा।"),
+   220,{security:3,trust:2,defence:2},
+   allowed,{risk:tr("competes with other budgets","दूसरे बजट से प्रतिस्पर्धा")}
+  );
+
+ }else if(currentPage==="profile"){
+  const box=document.createElement("div");
+  box.className="notice";
+  box.textContent=tr("Player: ","खिलाड़ी: ")+profile.name+
+   " | "+tr("Country: ","देश: ")+currentCountryName()+
+   " | "+tr("Role: ","भूमिका: ")+roleName();
+  root.appendChild(box);
+
+  const roleLabel=document.createElement("label");
+  roleLabel.textContent=tr("Change your role","अपनी भूमिका बदलें");
+  roleLabel.htmlFor="editRole";
+  root.appendChild(roleLabel);
+
+  const roleSelect=document.createElement("select");
+  roleSelect.id="editRole";
+
+  Object.keys(roleLabels).forEach(key=>{
+   const option=document.createElement("option");
+   option.value=key;
+   option.textContent=roleLabels[key][lang==="en"?0:1];
+   if(key===profile.role)option.selected=true;
+   roleSelect.appendChild(option);
+  });
+  root.appendChild(roleSelect);
+
+  const saveRole=document.createElement("button");
+  saveRole.textContent=tr("Save role","भूमिका सेव करें");
+  saveRole.onclick=async()=>{
+   if(busy)return;
+   const oldRole=profile.role;
+   profile.role=roleSelect.value;
+   busy=true;
+   renderAll();
+   try{
+    await saveState();
+    showMessage("gameMessage",tr(
+     "Role updated and saved. Available decisions may have changed.",
+     "भूमिका अपडेट और सेव हो गई। अब उपलब्ध फैसले बदल सकते हैं।"
+    ));
+   }catch(e){
+    profile.role=oldRole;
+    showMessage("gameMessage",tr("Role could not be saved: ","भूमिका सेव नहीं हुई: ")+(e.code||e.message),true);
+   }finally{
+    busy=false;
+    renderAll();
+   }
+  };
+  root.appendChild(saveRole);
+
+  const p=document.createElement("p");
+  p.className="muted";
+  p.textContent=tr(
+   "Saved game is stored under your own authenticated player record. Other players do not share this country state yet.",
+   "गेम तुम्हारे अपने लॉगिन रिकॉर्ड में सेव है। अभी दूसरे खिलाड़ियों के साथ देश का साझा state नहीं है।"
+  );
+  root.appendChild(p);
  }
 }
-async function saveGame(){
+
+function buildIndicatorList(){
+ const root=document.createElement("div");
+ root.className="grid";
+
+ const indicators=[
+  ["trust","Public trust","जनविश्वास"],
+  ["reputation","Leadership reputation","नेतृत्व प्रतिष्ठा"],
+  ["economy","Economy","अर्थव्यवस्था"],
+  ["healthcare","Healthcare","स्वास्थ्य"],
+  ["education","Education","शिक्षा"],
+  ["security","Public safety","जन-सुरक्षा"],
+  ["defence","Defence readiness","रक्षा तैयारी"],
+  ["environment","Environment","पर्यावरण"],
+  ["publicAnger","Public anger","जनता का गुस्सा"],
+  ["unemployment","Unemployment","बेरोजगारी"],
+  ["corruption","Corruption pressure","भ्रष्टाचार का दबाव"]
+ ];
+
+ indicators.forEach(([key,en,hi])=>{
+  const box=document.createElement("div");
+  box.className="stat";
+
+  const small=document.createElement("small");
+  small.textContent=tr(en,hi);
+
+  const strong=document.createElement("strong");
+  strong.textContent=fmt(state[key])+"/100";
+
+  const bar=document.createElement("div");
+  bar.className="bar";
+
+  const i=document.createElement("i");
+  i.style.width=clamp(state[key])+"%";
+
+  if(["publicAnger","unemployment","corruption"].includes(key)){
+   i.style.background=state[key]>60?"var(--red)":"var(--amber)";
+  }
+
+  bar.appendChild(i);
+  box.append(small,strong,bar);
+  root.appendChild(box);
+ });
+
+ return root;
+}
+
+const eventTemplates=[
+ {
+  id:"protest",
+  tag:["PUBLIC PROTEST","जन-विरोध"],
+  title:["Public protest over prices and services","महँगाई और सेवाओं को लेकर जनता का प्रदर्शन"],
+  body:[
+   "Crowds are demanding affordable essentials and better public services. The administration must choose a response.",
+   "जनता जरूरी चीजों की उचित कीमत और बेहतर सेवाएँ माँग रही है। प्रशासन को जवाब चुनना होगा।"
+  ],
+  options:[
+   {
+    label:["Open dialogue and publish a relief plan","बातचीत शुरू करो और राहत योजना प्रकाशित करो"],
+    desc:["Costs funds; can lower anger and improve trust.","खर्च होगा; गुस्सा घट सकता है और भरोसा बढ़ सकता है।"],
+    cost:220,effects:{trust:7,publicAnger:-12,reputation:3,economy:1}
+   },
+   {
+    label:["Independent review and targeted support","स्वतंत्र समीक्षा और जरूरतमंदों को सहायता"],
+    desc:["Addresses causes, but takes time and budget.","कारणों पर काम; समय और बजट लगेगा।"],
+    cost:320,effects:{trust:5,publicAnger:-10,corruption:-3,unemployment:-1}
+   },
+   {
+    label:["Use a heavy-handed response","अत्यधिक सख्ती वाला जवाब"],
+    desc:["May disperse the gathering temporarily; risk of backlash and lost trust.","भीड़ अस्थायी रूप से हट सकती है; प्रतिक्रिया और भरोसा घटने का जोखिम।"],
+    cost:140,effects:{security:3,trust:-10,publicAnger:12,reputation:-7}
+   },
+   {
+    label:["Ignore the demands","माँगों को अनदेखा करो"],
+    desc:["No immediate cost; anger and instability may rise.","तुरंत खर्च नहीं; गुस्सा और अस्थिरता बढ़ सकती है।"],
+    cost:0,effects:{trust:-6,publicAnger:10,reputation:-4,security:-2}
+   }
+  ]
+ },
+ {
+  id:"health",
+  tag:["HEALTH ALERT","स्वास्थ्य चेतावनी"],
+  title:["A seasonal illness is straining clinics","मौसमी बीमारी से क्लीनिकों पर दबाव"],
+  body:[
+   "Clinics report higher demand. Early monitoring and clear public communication can reduce disruption.",
+   "क्लीनिकों में मरीज बढ़ रहे हैं। निगरानी और साफ जनसंचार से व्यवधान घट सकता है।"
+  ],
+  options:[
+   {
+    label:["Fund hospitals, testing and public communication","अस्पताल, जाँच और जनसंचार को फंड दो"],
+    desc:["Strong health response; significant cost.","स्वास्थ्य के लिए अच्छा; खर्च अधिक।"],
+    cost:500,effects:{healthcare:10,trust:5,publicAnger:-5,reputation:3}
+   },
+   {
+    label:["Target high-risk areas first","पहले सबसे प्रभावित क्षेत्रों पर ध्यान"],
+    desc:["Lower cost, moderate improvement.","कम खर्च, मध्यम सुधार।"],
+    cost:260,effects:{healthcare:5,trust:2,publicAnger:-2}
+   },
+   {
+    label:["Delay action","कार्रवाई टालो"],
+    desc:["Saves money now; health and trust may worsen.","अभी पैसा बचेगा; स्वास्थ्य और भरोसा बिगड़ सकते हैं।"],
+    cost:0,effects:{healthcare:-7,trust:-5,publicAnger:6,reputation:-3}
+   }
+  ]
+ },
+ {
+  id:"jobs",
+  tag:["ECONOMY","अर्थव्यवस्था"],
+  title:["Local businesses warn of layoffs","स्थानीय व्यवसायों ने छँटनी की चेतावनी दी"],
+  body:[
+   "Small firms report rising costs and weak demand. Government support can protect jobs but uses limited funds.",
+   "छोटे कारोबार बढ़ते खर्च और कम माँग से परेशान हैं। सहायता रोजगार बचा सकती है, पर बजट सीमित है।"
+  ],
+  options:[
+   {
+    label:["Temporary small-business support","छोटे व्यवसायों को अस्थायी सहायता"],
+    desc:["Improves jobs and economy; costs treasury.","रोजगार और अर्थव्यवस्था को मदद; सरकारी खर्च।"],
+    cost:380,effects:{economy:6,unemployment:-6,trust:3,publicAnger:-3,futureIncome:50}
+   },
+   {
+    label:["Skills and job-transition programme","कौशल और नए रोजगार की योजना"],
+    desc:["Slower but more durable improvement.","धीमा, लेकिन टिकाऊ सुधार।"],
+    cost:420,effects:{education:3,economy:4,unemployment:-7,trust:3}
+   },
+   {
+    label:["Take no action this month","इस महीने कोई कदम न उठाओ"],
+    desc:["Budget is preserved; unemployment pressure may grow.","बजट बचेगा; बेरोजगारी का दबाव बढ़ सकता है।"],
+    cost:0,effects:{unemployment:5,economy:-3,trust:-2,publicAnger:4}
+   }
+  ]
+ },
+ {
+  id:"corruption",
+  tag:["ACCOUNTABILITY","जवाबदेही"],
+  title:["A public procurement complaint emerges","सरकारी खरीद को लेकर शिकायत आई"],
+  body:[
+   "A watchdog report alleges irregularities in a public contract. A fair, independent review can protect public funds.",
+   "एक रिपोर्ट में सरकारी ठेके में गड़बड़ी का आरोप है। निष्पक्ष जाँच सार्वजनिक धन बचा सकती है।"
+  ],
+  options:[
+   {
+    label:["Launch an independent investigation","स्वतंत्र जाँच शुरू करो"],
+    desc:["Costs money and time; can improve trust and reduce corruption.","खर्च और समय; भरोसा बढ़ सकता है और भ्रष्टाचार घट सकता है।"],
+    cost:240,effects:{corruption:-12,trust:5,reputation:4,publicAnger:-3}
+   },
+   {
+    label:["Publish the contract and audit summary","ठेका और ऑडिट सारांश सार्वजनिक करो"],
+    desc:["Improves transparency at moderate cost.","मध्यम खर्च में पारदर्शिता बढ़ेगी।"],
+    cost:130,effects:{corruption:-6,trust:4,reputation:3}
+   },
+   {
+    label:["Dismiss the complaint without review","जाँच के बिना शिकायत खारिज करो"],
+    desc:["Saves time now; trust and reputation can fall.","अभी समय बचेगा; भरोसा और प्रतिष्ठा गिर सकती है।"],
+    cost:0,effects:{corruption:5,trust:-7,reputation:-6,publicAnger:6}
+   }
+  ]
+ },
+ {
+  id:"environment",
+  tag:["ENVIRONMENT","पर्यावरण"],
+  title:["Severe weather disrupts local services","खराब मौसम से स्थानीय सेवाएँ बाधित"],
+  body:[
+   "Flooding, heat or a major storm has disrupted transport and essential services in some areas.",
+   "बाढ़, गर्मी या तूफान से कुछ क्षेत्रों में परिवहन और जरूरी सेवाएँ बाधित हैं।"
+  ],
+  options:[
+   {
+    label:["Emergency relief and resilient repairs","आपात राहत और मजबूत मरम्मत"],
+    desc:["Protects services and trust; high immediate cost.","सेवाएँ और भरोसा बचेंगे; तुरंत खर्च अधिक।"],
+    cost:420,effects:{environment:5,trust:5,economy:2,publicAnger:-4}
+   },
+   {
+    label:["Prioritise vulnerable communities","कमजोर समुदायों को प्राथमिकता"],
+    desc:["Moderate cost; reduces public pressure.","मध्यम खर्च; जनता का दबाव घटेगा।"],
+    cost:230,effects:{trust:3,healthcare:2,publicAnger:-4}
+   },
+   {
+    label:["Delay repairs","मरम्मत टालो"],
+    desc:["Keeps funds available now; disruption may worsen.","अभी बजट बचेगा; समस्या बढ़ सकती है।"],
+    cost:0,effects:{environment:-7,economy:-4,trust:-4,publicAnger:5}
+   }
+  ]
+ },
+ {
+  id:"education",
+  tag:["EDUCATION","शिक्षा"],
+  title:["Teachers and students call for school repairs","शिक्षक और विद्यार्थी स्कूल सुधार की माँग कर रहे हैं"],
+  body:[
+   "A review highlights crowded classrooms and maintenance needs. Investment competes with other budget priorities.",
+   "समीक्षा में भीड़भरी कक्षाएँ और मरम्मत की जरूरत सामने आई है। निवेश के लिए दूसरे बजट से प्रतिस्पर्धा होगी।"
+  ],
+  options:[
+   {
+    label:["Fund urgent repairs and learning support","जरूरी मरम्मत और पढ़ाई को फंड दो"],
+    desc:["Improves education and trust; costs funds.","शिक्षा और भरोसा बढ़ेगा; खर्च होगा।"],
+    cost:350,effects:{education:8,trust:4,economy:2,publicAnger:-3}
+   },
+   {
+    label:["Publish a phased school plan","चरणबद्ध स्कूल योजना प्रकाशित करो"],
+    desc:["Lower immediate cost, but results are slower.","तुरंत कम खर्च, लेकिन नतीजे धीमे।"],
+    cost:120,effects:{education:2,trust:2,reputation:2}
+   },
+   {
+    label:["Postpone the plan","योजना टाल दो"],
+    desc:["Budget saved now; frustration can rise.","अभी बजट बचेगा; नाराजगी बढ़ सकती है।"],
+    cost:0,effects:{education:-4,trust:-3,publicAnger:4}
+   }
+  ]
+ }
+];
+
+function generateEvent(){
+ const weights=eventTemplates.map(t=>
+  t.id==="protest"?(state.publicAnger>45?3:1):1
+ );
+ let total=weights.reduce((a,b)=>a+b,0);
+ let r=Math.random()*total,index=0;
+
+ for(let i=0;i<weights.length;i++){
+  r-=weights[i];
+  if(r<=0){index=i;break;}
+ }
+
+ const e=JSON.parse(JSON.stringify(eventTemplates[index]));
+ e.uid="event-"+state.turn+"-"+Date.now();
+ return e;
+}
+
+function buildEventCard(){
+ const e=state.currentEvent;
+ if(!e)return document.createElement("div");
+
+ const box=document.createElement("div");
+ box.className="panel event";
+
+ const tag=document.createElement("span");
+ tag.className="event-tag";
+ tag.textContent=e.tag[lang==="en"?0:1];
+
+ const h=document.createElement("h3");
+ h.textContent=e.title[lang==="en"?0:1];
+
+ const p=document.createElement("p");
+ p.className="muted";
+ p.textContent=e.body[lang==="en"?0:1];
+
+ box.append(tag,h,p);
+
+ e.options.forEach(opt=>{
+  const b=document.createElement("button");
+  b.className="action";
+
+  const st=document.createElement("strong");
+  st.textContent=opt.label[lang==="en"?0:1];
+
+  const de=document.createElement("span");
+  de.textContent=opt.desc[lang==="en"?0:1];
+
+  const cost=document.createElement("em");
+  cost.textContent=tr("Cost: ","खर्च: ")+fmt(opt.cost)+" credits";
+
+  b.append(st,de,cost);
+  b.disabled=busy||state.budget<opt.cost||(!canGovern()&&!canSecurity());
+
+  if(!canGovern()&&!canSecurity()){
+   cost.textContent=tr(
+    "Requires a government or public-order authority role.",
+    "सरकारी या कानून-व्यवस्था की अधिकार वाली भूमिका चाहिए।"
+   );
+  }
+
+  b.onclick=()=>resolveEvent(opt);
+  box.appendChild(b);
+ });
+
+ return box;
+}
+
+async function resolveEvent(opt){
+ if(busy||!state.currentEvent)return;
+
+ if(!canGovern()&&!canSecurity()){
+  showMessage("gameMessage",tr(
+   "Your role cannot approve this national decision.",
+   "तुम्हारी भूमिका यह राष्ट्रीय फैसला मंजूर नहीं कर सकती।"
+  ),true);
+  return;
+ }
+
+ if(state.budget<opt.cost){
+  showMessage("gameMessage",tr(
+   "Not enough budget. Choose a lower-cost response or advance the month.",
+   "बजट कम है। कम खर्च वाला विकल्प चुनो या महीना आगे बढ़ाओ।"
+  ),true);
+  return;
+ }
+
+ const old=JSON.parse(JSON.stringify(state));
+ busy=true;
+ renderAll();
+
+ try{
+  state.budget-=opt.cost;
+  applyEffects(opt.effects||{});
+
+  if(opt.futureIncome){
+   state.futureIncome+=num(opt.futureIncome);
+  }
+
+  const title=opt.label[lang==="en"?0:1];
+  state.currentEvent=null;
+
+  logEntry(
+   title,
+   tr(
+    "Event response applied. Related indicators changed together.",
+    "घटना पर फैसला लागू हुआ। संबंधित संकेतक साथ बदले।"
+   )
+  );
+
+  await saveState();
+  showMessage("gameMessage",tr(
+   "Event response saved.",
+   "घटना पर फैसला सेव हो गया।"
+  ));
+
+ }catch(e){
+  state=old;
+  showMessage("gameMessage",tr("Could not save decision: ","फैसला सेव नहीं हुआ: ")+(e.code||e.message),true);
+ }finally{
+  busy=false;
+  renderAll();
+ }
+}
+
+function applyEffects(changes){
+ for(const [key,val] of Object.entries(changes||{})){
+  const v=num(val);
+
+  if(key==="futureIncome"){
+   state.futureIncome+=v;
+   continue;
+  }
+
+  if(key==="budget"){
+   state.budget=Math.max(0,state.budget+v);
+   continue;
+  }
+
+  if(key==="taxRate"){
+   state.taxRate=Math.max(0,Math.min(2,state.taxRate+v));
+   continue;
+  }
+
+  if(Object.prototype.hasOwnProperty.call(state,key)&&typeof state[key]==="number"){
+   if([
+    "trust","reputation","economy","healthcare","education","security",
+    "defence","environment","publicAnger","unemployment","corruption"
+   ].includes(key)){
+    state[key]=clamp(state[key]+v);
+   }else{
+    state[key]=Math.max(0,state[key]+v);
+   }
+  }
+ }
+
+ // Cross-department consequences
+ if(state.publicAnger>70){
+  state.trust=clamp(state.trust-2);
+  state.security=clamp(state.security-2);
+ }
+
+ if(state.healthcare<30){
+  state.publicAnger=clamp(state.publicAnger+2);
+  state.trust=clamp(state.trust-1);
+ }
+
+ if(state.unemployment>65){
+  state.publicAnger=clamp(state.publicAnger+2);
+  state.trust=clamp(state.trust-1);
+ }
+
+ if(state.corruption>65){
+  state.trust=clamp(state.trust-2);
+  state.economy=clamp(state.economy-1);
+ }
+}
+
+async function applyDecision(title,desc,cost,changes){
+ if(busy||!state)return;
+
+ if(state.budget<cost){
+  showMessage("gameMessage",tr(
+   "Not enough treasury funds for this decision.",
+   "इस फैसले के लिए सरकारी बजट पर्याप्त नहीं है।"
+  ),true);
+  return;
+ }
+
+ const old=JSON.parse(JSON.stringify(state));
+ busy=true;
+ renderAll();
+
+ try{
+  state.budget-=cost;
+  applyEffects(changes);
+
+  if(changes.futureExpense){
+   state.futureExpense=(state.futureExpense||0)+num(changes.futureExpense);
+  }
+
+  logEntry(title,desc);
+  await saveState();
+
+  showMessage("gameMessage",tr(
+   "Decision saved. Cross-department effects have been applied.",
+   "फैसला सेव हुआ। दूसरे विभागों पर असर भी लागू किया गया।"
+  ));
+
+ }catch(e){
+  state=old;
+  showMessage("gameMessage",tr("Could not save: ","सेव नहीं हुआ: ")+(e.code||e.message),true);
+ }finally{
+  busy=false;
+  renderAll();
+ }
+}
+
+async function advanceTurn(){
+ if(busy||!state)return;
+
+ const old=JSON.parse(JSON.stringify(state));
+ busy=true;
+ renderAll();
+
+ try{
+  state.turn++;
+
+  // Revenue depends on economic activity and tax settings.
+  const revenue=Math.round(180+state.economy*5+state.taxRate*100);
+
+  // Routine public-service and defence expenses.
+  const routine=Math.round(
+   230+state.healthcare*1.2+state.education*.8+
+   state.defence*.6+(state.futureExpense||0)
+  );
+
+  const projectIncome=num(state.futureIncome);
+  state.futureIncome=0;
+  state.futureExpense=0;
+
+  state.budget=Math.max(
+   0,state.budget+revenue+projectIncome-routine
+  );
+
+  // Neglected services create future pressure.
+  if(state.healthcare<35){
+   state.trust=clamp(state.trust-2);
+   state.publicAnger=clamp(state.publicAnger+3);
+  }
+
+  if(state.education<30){
+   state.economy=clamp(state.economy-2);
+   state.unemployment=clamp(state.unemployment+2);
+  }
+
+  if(state.environment<30){
+   state.healthcare=clamp(state.healthcare-1);
+   state.economy=clamp(state.economy-1);
+  }
+
+  if(state.publicAnger<25){
+   state.security=clamp(state.security+1);
+  }
+
+  if(state.trust>70){
+   state.economy=clamp(state.economy+1);
+  }
+
+  if(state.economy>65){
+   state.unemployment=clamp(state.unemployment-1);
+  }
+
+  if(state.budget===0){
+   state.trust=clamp(state.trust-3);
+   state.publicAnger=clamp(state.publicAnger+4);
+   state.reputation=clamp(state.reputation-2);
+  }
+
+  state.currentEvent=generateEvent();
+
+  logEntry(
+   tr("Monthly accounts closed","मासिक हिसाब पूरा"),
+   tr("Revenue: ","राजस्व: ")+fmt(revenue)+
+   ", "+tr("routine spending: ","नियमित खर्च: ")+fmt(routine)+
+   ", "+tr("net change: ","कुल बदलाव: ")+fmt(revenue+projectIncome-routine)+"."
+  );
+
+  await saveState();
+
+  showMessage("gameMessage",tr(
+   "Month advanced. Review the new national event before choosing a response.",
+   "महीना आगे बढ़ गया। नए राष्ट्रीय event का जवाब सोचकर चुनो।"
+  ));
+
+ }catch(e){
+  state=old;
+  showMessage("gameMessage",tr("Could not advance month: ","महीना आगे नहीं बढ़ा: ")+(e.code||e.message),true);
+ }finally{
+  busy=false;
+  renderAll();
+ }
+}
+
+$("nextTurnBtn").onclick=advanceTurn;
+
+function renderAll(){
+ if(!state||!profile)return;
+ state=normalizeState(state);
+
+ $("budgetPill").textContent=tr("Treasury: ","सरकारी खजाना: ")+fmt(state.budget)+" credits";
+ $("welcomeTitle").textContent=tr("National control room","राष्ट्रीय नियंत्रण कक्ष");
+ $("welcomeText").textContent=currentCountryName()+" • "+profile.name+" • "+roleName()+" • "+tr("Month ","महीना ")+state.turn;
+ $("turnTag").textContent="TURN "+state.turn;
+
+ const statKeys=[
+  ["Treasury","खजाना",fmt(state.budget),"Limited funds"],
+  ["Public trust","जनविश्वास",state.trust+"/100","Higher is better"],
+  ["Public anger","जनता का गुस्सा",state.publicAnger+"/100","Lower is better"],
+  ["Economy","अर्थव्यवस्था",state.economy+"/100","Higher is better"],
+  ["Healthcare","स्वास्थ्य",state.healthcare+"/100","Higher is better"],
+  ["Education","शिक्षा",state.education+"/100","Higher is better"]
+ ];
+
+ const stats=$("mainStats");
+ stats.replaceChildren();
+
+ statKeys.forEach(x=>{
+  const d=document.createElement("div");
+  d.className="stat";
+
+  const s=document.createElement("small");
+  s.textContent=tr(x[0],x[1]);
+
+  const b=document.createElement("strong");
+  b.textContent=x[2];
+
+  const n=document.createElement("span");
+  n.className="delta";
+  n.textContent=tr(x[3],x[0]==="Treasury"?"सीमित बजट":"ऊँचा होना बेहतर");
+
+  d.append(s,b,n);
+  stats.appendChild(d);
+ });
+
+ $("eventContent").replaceChildren();
+
+ if(state.currentEvent){
+  $("eventContent").appendChild(buildEventCard());
+ }else{
+  const p=document.createElement("p");
+  p.className="muted";
+  p.textContent=tr(
+   "No unresolved event. Advance the month to receive the next event.",
+   "कोई लंबित घटना नहीं है। अगला event पाने के लिए महीना आगे बढ़ाओ।"
+  );
+  $("eventContent").appendChild(p);
+ }
+
+ $("history").replaceChildren();
+
+ if(!state.history.length){
+  const p=document.createElement("p");
+  p.className="muted";
+  p.textContent=tr("No decisions yet.","अभी कोई फैसला नहीं हुआ।");
+  $("history").appendChild(p);
+ }
+
+ state.history.slice(0,12).forEach(item=>{
+  const d=document.createElement("div");
+  d.className="log";
+
+  const b=document.createElement("strong");
+  b.textContent="M"+item.turn+" · "+item.title+" — ";
+
+  d.append(b,document.createTextNode(item.detail||""));
+  $("history").appendChild(d);
+ });
+
+ $("turnDescription").textContent=tr(
+  "Next month: revenue depends on economic activity and tax settings. Routine spending is deducted automatically; low trust or neglected services create additional pressure.",
+  "अगले महीने की आय अर्थव्यवस्था और कर पर निर्भर है। नियमित खर्च अपने आप कटेगा; कम भरोसा या कमजोर सेवाएँ अतिरिक्त दबाव पैदा करेंगी।"
+ );
+
+ renderPage();
+}
+
+async function saveState(){
  if(!userNow)throw new Error("auth-required");
+
+ const safeState=normalizeState(state);
+
  await setDoc(doc(db,"players",userNow.uid),{
-  name:profile.name,country:profile.country,role:profile.role,
-  gameState:game,updatedAt:serverTimestamp()
+  name:profile.name,
+  country:profile.country,
+  role:profile.role,
+  gameState:safeState,
+  updatedAt:serverTimestamp()
  },{merge:true});
 }
-async function takeAction(title,cost,changes){
- if(busy||!userNow)return;
- if(game.budget<cost){say(tr("Not enough budget.","बजट पर्याप्त नहीं है।"),true);return}
- busy=true;renderGame();say(tr("Saving decision...","फैसला सेव हो रहा है..."));
- const previous={...game};
- try{
-  game.budget-=cost;
-  for(const [k,v] of Object.entries(changes)){
-   if(k==="futureIncome")continue;
-   if(typeof game[k]==="number")game[k]=k==="budget"?game[k]+v:clamp(game[k]+v);
-  }
-  game.lastAction=title;
-  await saveGame();
-  say(tr("Decision saved online: ","फैसला ऑनलाइन सेव हुआ: ")+title);
- }catch(e){
-  game=previous;
-  say(tr("Could not save. Check Firestore Rules and connection. ","सेव नहीं हुआ। Firestore Rules और इंटरनेट जाँचो। ")+(e.code||e.message),true);
- }finally{busy=false;renderGame()}
-}
-async function nextTurn(){
- if(busy)return;
- busy=true;renderGame();const previous={...game};
- try{
-  game.turn=(game.turn||1)+1;
-  game.budget+=100;
-  game.lastAction="Turn "+game.turn;
-  await saveGame();
-  say(tr("Turn advanced and saved online.","अगला टर्न ऑनलाइन सेव हो गया।"));
- }catch(e){
-  game=previous;say(tr("Save failed: ","सेव नहीं हुआ: ")+(e.code||e.message),true);
- }finally{busy=false;renderGame()}
-}
 
-document.querySelectorAll(".dash-card").forEach(b=>{
- b.onclick=()=>{
-  currentPage=b.dataset.page;
-  renderGame();
-  $("gameArea").scrollIntoView({behavior:"smooth",block:"start"});
- };
-});
+function showGameForUser(user){
+ $("authPanel").classList.toggle("hidden",!!user);
+ $("setupPanel").classList.add("hidden");
+ $("gamePanel").classList.toggle("hidden",!user);
+ $("logoutBtn").classList.toggle("hidden",!user);
 
-let firebaseReady=false;
-try{
- const c=firebaseConfig;
- if(!c.apiKey||!c.authDomain||!c.projectId||!c.appId||
-    c.apiKey.includes("YOUR_")||c.projectId.includes("YOUR_")){
-  throw new Error("Firebase configuration is incomplete.");
+ if(!user){
+  $("globalMessage").textContent=tr(
+   "Sign in to start your country simulation.",
+   "देश का सिमुलेशन शुरू करने के लिए लॉगिन करो।"
+  );
  }
- const app=initializeApp(c);
- auth=getAuth(app);db=getFirestore(app);firebaseReady=true;
+}
+
+try{
+ const app=initializeApp(firebaseConfig);
+ auth=getAuth(app);
+ db=getFirestore(app);
+ firebaseReady=true;
+
  onAuthStateChanged(auth,async user=>{
   userNow=user;
-  $("authPanel").classList.toggle("hidden",!!user);
-  $("gamePanel").classList.toggle("hidden",!user);
+  showGameForUser(user);
+
   if(!user)return;
-  $("userEmail").textContent=user.email||"";
-  msg("globalMessage",tr("Logged in successfully.","लॉगिन सफल रहा।"));
+
+  $("globalMessage").textContent=tr(
+   "Signed in. Loading your saved country...",
+   "लॉगिन सफल। सेव किया देश लोड हो रहा है..."
+  );
+
   try{
    const snap=await getDoc(doc(db,"players",user.uid));
+
    if(snap.exists()){
     const d=snap.data();
-    if(d.name&&d.country){
-     profile={name:d.name,country:d.country,role:d.role||"Citizen"};
+
+    if(d.name&&d.country&&d.role){
+     profile={
+      name:String(d.name).slice(0,24),
+      country:String(d.country),
+      role:roleLabels[d.role]?d.role:"Citizen"
+     };
+
      selectedCountry=profile.country;
-     $("displayName").value=profile.name;
-     $("role").value=profile.role;
+     state=normalizeState(d.gameState);
+
+     $("gamePanel").classList.remove("hidden");
+     $("setupPanel").classList.add("hidden");
+
+     renderAll();
+
+     $("globalMessage").textContent=tr(
+      "Saved country loaded successfully.",
+      "सेव किया देश सफलतापूर्वक लोड हो गया।"
+     );
+
+    }else{
+     profile=null;
+     state=null;
+     $("gamePanel").classList.add("hidden");
+     $("setupPanel").classList.remove("hidden");
+     renderCountries();
     }
-    game=d.gameState?{...initialGame(),...d.gameState}:initialGame();
-   }else{game=initialGame()}
-   renderCountries();showProfile();renderGame();
+
+   }else{
+    profile=null;
+    state=null;
+    $("gamePanel").classList.add("hidden");
+    $("setupPanel").classList.remove("hidden");
+    renderCountries();
+   }
+
   }catch(e){
    console.error(e);
-   msg("profileMessage",tr("Could not load saved data: ","डेटा लोड नहीं हुआ: ")+(e.code||e.message),true);
+   showMessage(
+    "profileMessage",
+    tr("Could not load saved data: ","सेव डेटा लोड नहीं हुआ: ")+(e.code||e.message),
+    true
+   );
   }
  });
+
 }catch(e){
- console.error(e);msg("authMessage","Firebase setup error: "+e.message,true);
+ console.error(e);
+ firebaseReady=false;
+ showMessage("authMessage","Firebase setup error: "+e.message,true);
 }
+
 $("registerBtn").onclick=async()=>{
- if(!firebaseReady){msg("authMessage","Firebase configuration is not ready.",true);return}
- const email=$("email").value.trim(),password=$("password").value;
- if(!email||password.length<6){msg("authMessage",tr("Enter a valid email and password of at least 6 characters.","सही ईमेल और कम से कम 6 अक्षरों का पासवर्ड डालो।"),true);return}
- try{await createUserWithEmailAndPassword(auth,email,password);msg("authMessage","Account created.");}
- catch(e){msg("authMessage","Registration error: "+e.code,true)}
-};
-$("loginBtn").onclick=async()=>{
- if(!firebaseReady){msg("authMessage","Firebase configuration is not ready.",true);return}
- const email=$("email").value.trim(),password=$("password").value;
- if(!email||password.length<6){msg("authMessage",tr("Enter a valid email and password of at least 6 characters.","सही ईमेल और कम से कम 6 अक्षरों का पासवर्ड डालो।"),true);return}
- try{await signInWithEmailAndPassword(auth,email,password);msg("authMessage","Login successful.");}
- catch(e){msg("authMessage","Login error: "+e.code,true)}
-};
-$("logoutBtn").onclick=()=>signOut(auth);
-$("saveBtn").onclick=async()=>{
- if(!userNow){msg("profileMessage","Please log in first.",true);return}
- const name=$("displayName").value.trim(),role=$("role").value;
- if(!selectedCountry){msg("profileMessage",tr("Choose a country first.","पहले देश चुनो।"),true);return}
- if(!name){msg("profileMessage",tr("Enter a player name.","खिलाड़ी का नाम लिखो।"),true);return}
- profile={name,country:selectedCountry,role};
+ if(!firebaseReady){
+  showMessage("authMessage","Firebase is not configured.",true);
+  return;
+ }
+
+ const email=$("email").value.trim();
+ const password=$("password").value;
+
+ if(!email||password.length<6){
+  showMessage("authMessage",tr(
+   "Enter a valid email and a password of at least 6 characters.",
+   "सही ईमेल और कम से कम 6 अक्षरों का पासवर्ड डालो।"
+  ),true);
+  return;
+ }
+
  try{
-  await setDoc(doc(db,"players",userNow.uid),{
-   name,country:selectedCountry,role,updatedAt:serverTimestamp(),
-   gameState:game||initialGame()
-  },{merge:true});
-  game=game||initialGame();showProfile();renderGame();
-  msg("profileMessage",tr("Profile saved online successfully.","प्रोफाइल ऑनलाइन सेव हो गई।"));
+  await createUserWithEmailAndPassword(auth,email,password);
+  showMessage("authMessage",tr("Account created.","अकाउंट बन गया।"));
  }catch(e){
-  console.error(e);msg("profileMessage","Save error: "+(e.code||e.message),true);
+  showMessage("authMessage",tr("Registration error: ","रजिस्ट्रेशन में समस्या: ")+(e.code||e.message),true);
  }
 };
+
+$("loginBtn").onclick=async()=>{
+ if(!firebaseReady){
+  showMessage("authMessage","Firebase is not configured.",true);
+  return;
+ }
+
+ const email=$("email").value.trim();
+ const password=$("password").value;
+
+ if(!email||password.length<6){
+  showMessage("authMessage",tr(
+   "Enter a valid email and a password of at least 6 characters.",
+   "सही ईमेल और कम से कम 6 अक्षरों का पासवर्ड डालो।"
+  ),true);
+  return;
+ }
+
+ try{
+  await signInWithEmailAndPassword(auth,email,password);
+  showMessage("authMessage",tr("Login successful.","लॉगिन सफल।"));
+ }catch(e){
+  showMessage("authMessage",tr("Login error: ","लॉगिन में समस्या: ")+(e.code||e.message),true);
+ }
+};
+
+$("logoutBtn").onclick=async()=>{
+ try{
+  await signOut(auth);
+ }catch(e){
+  console.error(e);
+ }
+};
+
+$("saveProfileBtn").onclick=async()=>{
+ if(!userNow){
+  showMessage("profileMessage","Please log in first.",true);
+  return;
+ }
+
+ const name=$("displayName").value.trim();
+ const role=$("role").value;
+
+ if(!selectedCountry){
+  showMessage("profileMessage",tr("Choose a country first.","पहले देश चुनो।"),true);
+  return;
+ }
+
+ if(!name){
+  showMessage("profileMessage",tr("Enter a player name.","खिलाड़ी का नाम लिखो।"),true);
+  return;
+ }
+
+ const oldProfile=profile;
+ const oldState=state;
+
+ profile={name,country:selectedCountry,role};
+ state=state?normalizeState(state):initialState();
+
+ try{
+  await saveState();
+
+  $("setupPanel").classList.add("hidden");
+  $("gamePanel").classList.remove("hidden");
+
+  renderAll();
+
+  showMessage("profileMessage",tr(
+   "Profile and country saved online.",
+   "प्रोफाइल और देश ऑनलाइन सेव हो गए।"
+  ));
+
+  $("globalMessage").textContent=tr(
+   "Your country is ready. Start with the dashboard and review events before responding.",
+   "तुम्हारा देश तैयार है। डैशबोर्ड से शुरू करो और event पर सोचकर फैसला लो।"
+  );
+
+ }catch(e){
+  profile=oldProfile;
+  state=oldState;
+
+  showMessage(
+   "profileMessage",
+   tr("Save error: ","सेव में समस्या: ")+(e.code||e.message),
+   true
+  );
+ }
+};
+
+function boot(){
+ renderCountries();
+ renderDashboard();
+}
+boot();
 applyLanguage();
 </script>
 </body>
